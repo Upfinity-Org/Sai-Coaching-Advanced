@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Sai Coaching Center — Website
 
 Website for Sai Coaching Center, Thoraipakkam — CBSE coaching for 9th & 10th
@@ -21,3 +22,6 @@ npm run build
 
 This outputs a static site to `dist/`, ready to deploy to any static host
 (Netlify, Vercel, GitHub Pages, etc).
+=======
+# Sai-Coaching
+>>>>>>> b2182e455e60fa956ac7eb09545cd61d71edd749
