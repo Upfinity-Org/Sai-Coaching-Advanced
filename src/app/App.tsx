@@ -13,18 +13,31 @@ import {
    ========================================================= */
 type Page = "home" | "about" | "courses" | "gallery" | "blog" | "contact";
 
+/* ---- Business info — single source of truth ----
+   NOTE: Email is a placeholder (not on the source info card) — swap in the real one. */
+const BRAND = {
+  name: "Sai Coaching Center",
+  location: "Thoraipakkam",
+  cityLine: "Thoraipakkam, Chennai",
+  addressLine: "Thoraipakkam, Chennai, Tamil Nadu", // TODO: replace with exact door no. / street once confirmed
+  phone1: "91711 19078",
+  phone2: "86789 78053",
+  phone1Href: "+919171119078",
+  phone2Href: "+918678978053",
+  email: "info@saicoachingcenter.in", // TODO: placeholder — replace with the real business email
+};
+
 const TEACHERS = [
-  { id: 1, name: "Mathematics Faculty", subject: "Mathematics", classes: "IX–XII", pin: "#E05252", rotation: -2.5, bio: "Expert in Algebra, Calculus & Coordinate Geometry with 12+ years experience" },
-  { id: 2, name: "Physics Faculty", subject: "Physics", classes: "IX–XII", pin: "#4A90D9", rotation: 1.5, bio: "Specialist in Mechanics, Optics & Modern Physics — CBSE paper setter" },
-  { id: 3, name: "Chemistry Faculty", subject: "Chemistry", classes: "IX–XII", pin: "#48A86A", rotation: -1, bio: "Expert in Organic, Inorganic & Physical Chemistry — 8 years coaching" },
-  { id: 4, name: "Senior Math Faculty", subject: "Mathematics", classes: "XI–XII", pin: "#D4A017", rotation: 2.5, bio: "IIT-level problem solving and Board exam preparation specialist" },
+  { id: 1, name: "Mathematics Faculty", subject: "Mathematics", classes: "IX–B.E/B.Tech", pin: "#E05252", rotation: -2.5, bio: "Expert in Algebra, Calculus & Coordinate Geometry" },
+  { id: 2, name: "Physics Faculty", subject: "Physics", classes: "XI–B.E/B.Tech", pin: "#4A90D9", rotation: 1.5, bio: "Specialist in Mechanics, Optics & Modern Physics" },
+  { id: 3, name: "Chemistry Faculty", subject: "Chemistry", classes: "XI–B.E/B.Tech", pin: "#48A86A", rotation: -1, bio: "Expert in Organic, Inorganic & Physical Chemistry" },
+  { id: 4, name: "Science Faculty", subject: "Science", classes: "IX–X", pin: "#D4A017", rotation: 2.5, bio: "Strong foundation building for CBSE 9th & 10th Science" },
 ];
 
 const COURSES = [
-  { grade: "Class IX", subjects: ["Algebra & Number Systems", "Laws of Motion & Gravitation", "Atoms & Molecules"], board: "CBSE & State Board", color: "#6AAE45" },
-  { grade: "Class X", subjects: ["Quadratic Equations & Geometry", "Electricity & Light", "Carbon Compounds"], board: "CBSE & State Board", color: "#5A9A38" },
-  { grade: "Class XI", subjects: ["Functions, Limits & Calculus", "Thermodynamics & Waves", "Organic Chemistry Basics"], board: "CBSE & State Board", color: "#4A8830" },
-  { grade: "Class XII", subjects: ["Integration, Probability & Vectors", "Electromagnetic Waves & Optics", "Polymer & Analytical Chemistry"], board: "CBSE & State Board", color: "#3A7625" },
+  { grade: "CBSE — 9th & 10th", subjects: ["Mathematics", "Science — Physics, Chemistry & Biology"], board: "Maths & Science", color: "#6AAE45" },
+  { grade: "CBSE — 11th & 12th", subjects: ["Mathematics", "Physics", "Chemistry"], board: "Maths, Physics & Chemistry", color: "#4A8830" },
+  { grade: "B.E / B.Tech", subjects: ["Engineering Mathematics", "Engineering Physics", "Engineering Chemistry"], board: "Maths, Physics & Chemistry", color: "#3A7625" },
 ];
 
 const BLOG_POSTS = [
@@ -356,10 +369,10 @@ function Navbar({ page, setPage, dark, setDark }: { page: Page; setPage: (p: Pag
       <div className="max-w-7xl mx-auto px-5 flex items-center justify-between gap-4">
         {/* Logo */}
         <button onClick={() => { setPage("home"); setOpen(false); }} className="flex items-center gap-2.5 group">
-          <div className="w-9 h-9 rounded flex items-center justify-center text-white font-bold text-sm shrink-0" style={{ background: "linear-gradient(135deg, #2C5016, #5A9040)", boxShadow: "0 2px 12px rgba(90,144,64,0.4)" }}>SB</div>
+          <div className="w-9 h-9 rounded flex items-center justify-center text-white font-bold text-sm shrink-0" style={{ background: "linear-gradient(135deg, #2C5016, #5A9040)", boxShadow: "0 2px 12px rgba(90,144,64,0.4)", fontFamily: "DM Sans, sans-serif" }}>SC</div>
           <div>
-            <div className="chalk text-lg font-bold leading-none tracking-wide">Scholars' Board</div>
-            <div className="text-xs font-medium tracking-widest uppercase opacity-60" style={{ color: "rgba(245,240,228,0.7)", fontFamily: "DM Sans, sans-serif" }}>Academy</div>
+            <div className="chalk text-lg font-bold leading-none tracking-wide">Sai Coaching</div>
+            <div className="text-xs font-medium tracking-widest uppercase opacity-60" style={{ color: "rgba(245,240,228,0.7)", fontFamily: "DM Sans, sans-serif" }}>Center</div>
           </div>
         </button>
 
@@ -430,8 +443,8 @@ function HeroSection({ setPage }: { setPage: (p: Page) => void }) {
           <div className="px-6 py-10 md:px-12 md:py-14 min-h-[60vh] flex flex-col justify-between">
             {/* Top corner annotations */}
             <div className="flex justify-between items-start">
-              <div className="chalk text-sm opacity-60" style={{ transform: "rotate(-1deg)" }}>CBSE &amp; State Board</div>
-              <div className="chalk text-sm opacity-60 text-right" style={{ transform: "rotate(1deg)" }}>Classes IX — XII</div>
+              <div className="chalk text-sm opacity-60" style={{ transform: "rotate(-1deg)" }}>CBSE Coaching</div>
+              <div className="chalk text-sm opacity-60 text-right" style={{ transform: "rotate(1deg)" }}>Home Tuition &amp; Online Classes</div>
             </div>
 
             {/* Main content */}
@@ -441,12 +454,12 @@ function HeroSection({ setPage }: { setPage: (p: Page) => void }) {
                 <div className={`chalk text-2xl md:text-3xl opacity-70 mb-2 chalk-anim ${ready ? "vis" : ""}`} style={{ animationDelay: "0.1s" }}>
                   — Welcome to —
                 </div>
-                <h1 className={`chalk text-5xl sm:text-6xl md:text-8xl font-bold leading-none tracking-wide chalk-anim ${ready ? "vis" : ""}`}
+                <h1 className={`chalk text-4xl sm:text-6xl md:text-7xl font-bold leading-none tracking-wide chalk-anim ${ready ? "vis" : ""}`}
                   style={{ animationDelay: "0.3s", textShadow: "0 0 40px rgba(245,240,228,0.12), 3px 3px 0 rgba(0,0,0,0.4)" }}>
-                  Scholars&apos; Board
+                  {BRAND.name}
                 </h1>
                 <div className={`chalk text-2xl md:text-3xl mt-2 opacity-80 chalk-anim ${ready ? "vis" : ""}`} style={{ animationDelay: "0.7s" }}>
-                  Academy
+                  {BRAND.location}
                 </div>
               </div>
 
@@ -477,7 +490,7 @@ function HeroSection({ setPage }: { setPage: (p: Page) => void }) {
 
             {/* Bottom stats row */}
             <div className={`flex flex-wrap justify-center gap-6 md:gap-10 pt-4 chalk-anim ${ready ? "vis" : ""}`} style={{ animationDelay: "2s" }}>
-              {[["500+", "Students"], ["12+", "Years"], ["3", "Subjects"], ["2", "Boards"]].map(([n, l]) => (
+              {[["3", "Subjects"], ["3", "Levels"], ["2", "Class Modes"], ["CBSE", "Board"]].map(([n, l]) => (
                 <div key={l} className="text-center">
                   <div className="chalk text-2xl md:text-3xl font-bold">{n}</div>
                   <div className="chalk text-sm opacity-60">{l}</div>
@@ -503,9 +516,9 @@ function SubjectsSection() {
   const chem = useReveal();
 
   const panels = [
-    { hook: math, title: "Mathematics", tag: "IX–XII", color: "chalk-blue", icon: <Calculator size={22} />, svg: <MathChalkSVG drawn={math.vis} />, topics: ["Number Systems & Algebra", "Coordinate Geometry", "Calculus & Integration", "Statistics & Probability", "Trigonometry & Vectors"] },
-    { hook: phy, title: "Physics", tag: "IX–XII", color: "chalk-yellow", icon: <Atom size={22} />, svg: <PhysicsChalkSVG drawn={phy.vis} />, topics: ["Mechanics & Laws of Motion", "Thermodynamics & Heat", "Waves, Sound & Light", "Electricity & Magnetism", "Modern Physics & Optics"] },
-    { hook: chem, title: "Chemistry", tag: "IX–XII", color: "chalk-green", icon: <Zap size={22} />, svg: <ChemistryChalkSVG drawn={chem.vis} />, topics: ["Matter & Atomic Structure", "Periodic Table & Bonding", "Organic Chemistry", "Acids, Bases & Salts", "Electrochemistry & Polymers"] },
+    { hook: math, title: "Mathematics", tag: "IX–B.E/Tech", color: "chalk-blue", icon: <Calculator size={22} />, svg: <MathChalkSVG drawn={math.vis} />, topics: ["Number Systems & Algebra", "Coordinate Geometry", "Calculus & Integration", "Statistics & Probability", "Trigonometry & Vectors"] },
+    { hook: phy, title: "Physics", tag: "IX–B.E/Tech", color: "chalk-yellow", icon: <Atom size={22} />, svg: <PhysicsChalkSVG drawn={phy.vis} />, topics: ["Mechanics & Laws of Motion", "Thermodynamics & Heat", "Waves, Sound & Light", "Electricity & Magnetism", "Modern Physics & Optics"] },
+    { hook: chem, title: "Chemistry", tag: "IX–B.E/Tech", color: "chalk-green", icon: <Zap size={22} />, svg: <ChemistryChalkSVG drawn={chem.vis} />, topics: ["Matter & Atomic Structure", "Periodic Table & Bonding", "Organic Chemistry", "Acids, Bases & Salts", "Electrochemistry & Polymers"] },
   ];
 
   return (
@@ -554,11 +567,11 @@ function SubjectsSection() {
 function WhyUsSection({ setPage }: { setPage: (p: Page) => void }) {
   const { ref, vis } = useReveal();
   const reasons = [
-    { icon: <Award size={18} />, title: "Expert Faculty", desc: "Subject-specialist teachers with deep CBSE & State Board expertise" },
+    { icon: <Award size={18} />, title: "Expert Faculty", desc: "Subject-specialist teachers with deep CBSE expertise across school and engineering levels" },
     { icon: <Users size={18} />, title: "Small Batch Sizes", desc: "Maximum 15 students per batch — every student gets personal attention" },
     { icon: <Clock size={18} />, title: "Flexible Schedules", desc: "Morning, afternoon & evening slots to fit your school timetable" },
     { icon: <BookOpen size={18} />, title: "Curated Study Material", desc: "In-house notes, question banks, and solved CBSE papers" },
-    { icon: <Star size={18} />, title: "Proven Track Record", desc: "Consistent 90%+ results in Board exams over 12 years" },
+    { icon: <Star size={18} />, title: "Home Tuition & Online Classes", desc: "Prefer learning at home or remotely? Both home tuition and online classes are available" },
     { icon: <CheckCircle size={18} />, title: "Doubt Sessions", desc: "Dedicated weekly doubt-clearing sessions at no extra cost" },
   ];
 
@@ -616,7 +629,7 @@ function CoursesPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
             <ChalkRule />
             <div className="chalk text-lg opacity-65 mt-2">Structured. Sequential. Scored.</div>
           </div>
-          <div ref={ref} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div ref={ref} className="grid sm:grid-cols-1 md:grid-cols-3 gap-6">
             {COURSES.map(({ grade, subjects, board, color }, i) => (
               <div key={grade} className={`chalk-anim ${vis ? "vis" : ""}`} style={{ animationDelay: `${i * 0.15}s` }}>
                 <Board className="h-full">
@@ -803,7 +816,7 @@ function CTASection({ setPage }: { setPage: (p: Page) => void }) {
                 </div>
                 <ChalkRule />
                 <div className="chalk text-lg opacity-75 max-w-lg mx-auto leading-relaxed">
-                  Join hundreds of students who have scored distinctions in CBSE &amp; State Board with our guidance. The board is ready. The chalk is in hand.
+                  Join the students who have scored distinctions in CBSE with our guidance. The board is ready. The chalk is in hand.
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
                   <button onClick={() => setPage("contact")} className="inline-flex items-center gap-2 px-8 py-4 rounded font-bold text-lg transition-all hover:scale-105"
@@ -816,10 +829,11 @@ function CTASection({ setPage }: { setPage: (p: Page) => void }) {
                   </button>
                 </div>
                 {/* Contact quick links */}
-                <div className="flex flex-wrap justify-center gap-6 mt-6 opacity-70">
-                  {[{ icon: <Phone size={14} />, text: "+91 98765 43210" }, { icon: <Mail size={14} />, text: "info@scholarsboard.in" }, { icon: <MapPin size={14} />, text: "Your City, India" }].map(({ icon, text }) => (
-                    <div key={text} className="chalk flex items-center gap-1.5 text-sm">{icon} {text}</div>
-                  ))}
+                <div className="flex flex-wrap justify-center gap-6 mt-6 opacity-80" style={{ fontFamily: "DM Sans, sans-serif" }}>
+                  <a href={`tel:${BRAND.phone1Href}`} className="flex items-center gap-1.5 text-sm hover:opacity-100 transition-opacity"><Phone size={14} /> {BRAND.phone1}</a>
+                  <a href={`tel:${BRAND.phone2Href}`} className="flex items-center gap-1.5 text-sm hover:opacity-100 transition-opacity"><Phone size={14} /> {BRAND.phone2}</a>
+                  <a href={`mailto:${BRAND.email}`} className="flex items-center gap-1.5 text-sm hover:opacity-100 transition-opacity"><Mail size={14} /> {BRAND.email}</a>
+                  <div className="flex items-center gap-1.5 text-sm"><MapPin size={14} /> {BRAND.cityLine}</div>
                 </div>
               </div>
             </div>
@@ -921,10 +935,10 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
                   <div className="space-y-4">
                     <div className="chalk text-xl font-bold chalk-yellow">How It All Started</div>
                     <div className="chalk text-base opacity-80 leading-relaxed">
-                      Scholars&apos; Board Academy was founded with one belief: that every student who struggles with Mathematics or Science is simply waiting for the right teacher. Our founders — passionate educators themselves — set up a small tuition room and began with six students.
+                      {BRAND.name} was founded with one belief: that every student who struggles with Mathematics or Science is simply waiting for the right teacher. Our founders — passionate educators themselves — set up a small tuition room in {BRAND.location} and began with a handful of students.
                     </div>
                     <div className="chalk text-base opacity-80 leading-relaxed">
-                      Twelve years later, over five hundred students have walked through our doors, and hundreds have achieved distinctions in their Board examinations. The board on our wall has never stopped being written upon.
+                      Since then, we've grown from school-level CBSE coaching into Maths, Physics &amp; Chemistry support for B.E and B.Tech students too — with home tuition and online classes for families who can't make it in. The board on our wall has never stopped being written upon.
                     </div>
                   </div>
                   <div className="space-y-4">
@@ -946,7 +960,7 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
                 {/* Stats row */}
                 <div className="mt-10 pt-6" style={{ borderTop: "1.5px solid rgba(245,240,228,0.2)" }}>
                   <div className="flex flex-wrap justify-around gap-6">
-                    {[["500+", "Students Taught"], ["12+", "Years Running"], ["95%", "Board Pass Rate"], ["4", "Expert Faculty"]].map(([n, l]) => (
+                    {[["9th–B.E/Tech", "Levels Taught"], ["CBSE", "Board"], ["2", "Class Modes"], ["4", "Expert Faculty"]].map(([n, l]) => (
                       <div key={l} className="text-center">
                         <div className="chalk text-3xl font-bold chalk-yellow">{n}</div>
                         <div className="chalk text-sm opacity-60">{l}</div>
@@ -979,28 +993,34 @@ function CoursesPage({ setPage }: { setPage: (p: Page) => void }) {
 
   const fullCourses = [
     {
-      grade: "Class IX", board: "CBSE & State Board",
+      grade: "Class IX", board: "CBSE — Maths & Science",
       math: ["Real Numbers & Number Systems", "Polynomials & Algebraic Identities", "Linear Equations in Two Variables", "Coordinate Geometry Basics", "Triangles & Quadrilaterals", "Circles & Areas", "Surface Areas & Volumes", "Statistics & Probability"],
       physics: ["Motion & Laws of Motion", "Gravitation", "Work, Energy & Power", "Sound & Wave Basics", "Matter in Our Surroundings"],
       chemistry: ["Atoms & Molecules", "Structure of the Atom", "Mixtures & Solutions", "Is Matter Around Us Pure?", "Chemical Reactions Intro"],
     },
     {
-      grade: "Class X", board: "CBSE & State Board",
+      grade: "Class X", board: "CBSE — Maths & Science",
       math: ["Real Numbers (Euclid's Division)", "Polynomials — Degree & Zeroes", "Pair of Linear Equations", "Quadratic Equations", "Arithmetic Progressions", "Triangles & Similarity", "Circles — Tangents", "Constructions", "Coordinate Geometry", "Trigonometry & Applications", "Areas Related to Circles", "Statistics & Probability"],
       physics: ["Light — Reflection & Refraction", "Human Eye & Defects", "Electricity — Ohm's Law", "Magnetic Effects of Current", "Sources of Energy"],
       chemistry: ["Chemical Reactions & Equations", "Acids, Bases & Salts", "Metals & Non-Metals", "Carbon & Organic Compounds", "Periodic Classification"],
     },
     {
-      grade: "Class XI", board: "CBSE & State Board",
+      grade: "Class XI", board: "CBSE — Maths, Physics & Chemistry",
       math: ["Sets & Relations", "Trigonometric Functions", "Principle of Mathematical Induction", "Complex Numbers", "Linear Inequalities", "Permutations & Combinations", "Binomial Theorem", "Sequences & Series", "Straight Lines & Conics", "3D Geometry Intro", "Limits & Derivatives", "Statistics & Probability"],
       physics: ["Units & Measurement", "Kinematics in 1D & 2D", "Laws of Motion", "Work, Energy & Power", "Systems of Particles", "Gravitation", "Mechanical Properties", "Thermodynamics", "Kinetic Theory", "Waves & Oscillations"],
       chemistry: ["Some Basic Concepts of Chemistry", "Atomic Structure", "Classification of Elements", "Chemical Bonding", "States of Matter", "Thermodynamics", "Equilibrium", "Redox Reactions", "Hydrogen & s-Block", "Organic Chemistry — Introduction", "Hydrocarbons"],
     },
     {
-      grade: "Class XII", board: "CBSE & State Board",
+      grade: "Class XII", board: "CBSE — Maths, Physics & Chemistry",
       math: ["Relations & Functions", "Inverse Trigonometric Functions", "Matrices & Determinants", "Continuity & Differentiability", "Applications of Derivatives", "Integrals (Definite & Indefinite)", "Application of Integrals", "Differential Equations", "Vector Algebra", "3D Geometry", "Linear Programming", "Probability"],
       physics: ["Electrostatics", "Current Electricity", "Magnetic Effects", "EMI & AC Circuits", "Electromagnetic Waves", "Ray & Wave Optics", "Dual Nature of Matter", "Atoms & Nuclei", "Semiconductor Electronics"],
       chemistry: ["Solid State", "Solutions & Colligative Properties", "Electrochemistry", "Chemical Kinetics", "Surface Chemistry", "General Principles of Metals", "p-Block Elements", "d & f Block", "Coordination Compounds", "Haloalkanes & Haloarenes", "Alcohols, Phenols, Ethers", "Aldehydes & Ketones", "Amines", "Biomolecules & Polymers"],
+    },
+    {
+      grade: "B.E / B.Tech", board: "Engineering — Maths, Physics & Chemistry",
+      math: ["Differential & Integral Calculus", "Partial Derivatives & Multiple Integrals", "Ordinary Differential Equations", "Vector Calculus", "Linear Algebra & Matrices", "Complex Analysis Basics", "Laplace Transforms", "Numerical Methods"],
+      physics: ["Wave Optics & Interference", "Quantum Mechanics Basics", "Semiconductor Physics", "Electromagnetic Theory", "Laser & Fibre Optics", "Crystal Structures & Solid State Physics"],
+      chemistry: ["Electrochemistry & Corrosion", "Polymers & Composites", "Water Treatment & Analysis", "Fuels & Combustion", "Engineering Materials", "Spectroscopy Basics"],
     },
   ];
 
@@ -1088,7 +1108,7 @@ function CoursesPage({ setPage }: { setPage: (p: Page) => void }) {
 
               <div className="mt-8 pt-6 flex flex-wrap gap-4 items-center justify-between" style={{ borderTop: "1.5px solid rgba(245,240,228,0.15)" }}>
                 <div className="chalk text-sm opacity-60">
-                  Both CBSE &amp; State Board covered ✓ &nbsp;|&nbsp; Regular tests included ✓ &nbsp;|&nbsp; Board exam strategies ✓
+                  Full CBSE syllabus covered ✓ &nbsp;|&nbsp; Regular tests included ✓ &nbsp;|&nbsp; Board exam strategies ✓
                 </div>
                 <button onClick={() => setPage("contact")} className="inline-flex items-center gap-2 px-5 py-2.5 rounded font-semibold text-sm"
                   style={{ background: "rgba(245,240,228,0.1)", border: "2px solid rgba(245,240,228,0.35)", color: "rgba(245,240,228,0.9)", fontFamily: "DM Sans, sans-serif" }}>
@@ -1179,7 +1199,7 @@ function BlogPage() {
             <div className="w-3 h-3 rounded-full bg-red-400" />
             <div className="w-3 h-3 rounded-full bg-yellow-400" />
             <div className="w-3 h-3 rounded-full bg-green-400" />
-            <span className="chalk text-sm opacity-70 ml-2">Scholars&apos; Board — Teacher&apos;s Notes 2025</span>
+            <span className="chalk text-sm opacity-70 ml-2">{BRAND.name} — Teacher&apos;s Notes 2025</span>
           </div>
 
           <div ref={ref} className="rounded-b-lg overflow-hidden shadow-2xl" style={{ background: "#FBF8F0" }}>
@@ -1254,20 +1274,27 @@ function ContactPage() {
               {/* Contact info card */}
               <div className={`md:col-span-2 chalk-anim ${vis ? "vis" : ""}`}>
                 <div className="bg-[#FBF8F0] rounded p-6 shadow-xl h-full" style={{ border: "1px solid rgba(100,70,30,0.2)" }}>
-                  <div className="text-gray-800 font-bold text-xl mb-1" style={{ fontFamily: "Caveat, cursive" }}>Scholars&apos; Board Academy</div>
+                  <div className="text-gray-800 font-bold text-xl mb-1" style={{ fontFamily: "DM Sans, sans-serif" }}>{BRAND.name}</div>
                   <div className="w-12 h-0.5 mb-4" style={{ background: "#2C5016" }} />
                   <div className="space-y-4">
                     {[
-                      { icon: <MapPin size={16} />, label: "Address", val: "123, Knowledge Lane, Your City, State — 500001" },
-                      { icon: <Phone size={16} />, label: "Phone", val: "+91 98765 43210" },
-                      { icon: <Mail size={16} />, label: "Email", val: "info@scholarsboard.in" },
-                      { icon: <Clock size={16} />, label: "Hours", val: "Mon–Sat: 7 AM – 8 PM" },
-                    ].map(({ icon, label, val }) => (
+                      { icon: <MapPin size={16} />, label: "Address", val: BRAND.addressLine },
+                      { icon: <Phone size={16} />, label: "Phone", val: BRAND.phone1, href: `tel:${BRAND.phone1Href}`, val2: BRAND.phone2, href2: `tel:${BRAND.phone2Href}` },
+                      { icon: <Mail size={16} />, label: "Email", val: BRAND.email, href: `mailto:${BRAND.email}` },
+                      { icon: <Clock size={16} />, label: "Hours", val: "Mon–Sat: 7 AM – 8 PM" /* TODO: confirm real hours */ },
+                    ].map(({ icon, label, val, href, val2, href2 }) => (
                       <div key={label} className="flex items-start gap-3">
                         <div style={{ color: "#2C5016", marginTop: 2 }}>{icon}</div>
                         <div>
                           <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider" style={{ fontFamily: "DM Sans, sans-serif" }}>{label}</div>
-                          <div className="text-sm text-gray-700 leading-snug" style={{ fontFamily: "DM Sans, sans-serif" }}>{val}</div>
+                          {href ? (
+                            <div className="text-sm text-gray-700 leading-snug" style={{ fontFamily: "DM Sans, sans-serif" }}>
+                              <a href={href} className="hover:text-[#2C5016] transition-colors">{val}</a>
+                              {val2 && href2 && <> / <a href={href2} className="hover:text-[#2C5016] transition-colors">{val2}</a></>}
+                            </div>
+                          ) : (
+                            <div className="text-sm text-gray-700 leading-snug" style={{ fontFamily: "DM Sans, sans-serif" }}>{val}</div>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -1314,13 +1341,13 @@ function ContactPage() {
                         className="col-span-1 px-3 py-2.5 rounded text-sm text-gray-700 border focus:outline-none"
                         style={{ borderColor: "rgba(44,80,22,0.25)", fontFamily: "DM Sans, sans-serif", background: "rgba(255,255,255,0.7)" }}>
                         <option value="">Select Class</option>
-                        {["IX", "X", "XI", "XII"].map(g => <option key={g} value={g}>Class {g}</option>)}
+                        {["IX", "X", "XI", "XII", "B.E / B.Tech"].map(g => <option key={g} value={g}>{g === "B.E / B.Tech" ? g : `Class ${g}`}</option>)}
                       </select>
                       <select value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })}
                         className="col-span-1 px-3 py-2.5 rounded text-sm text-gray-700 border focus:outline-none"
                         style={{ borderColor: "rgba(44,80,22,0.25)", fontFamily: "DM Sans, sans-serif", background: "rgba(255,255,255,0.7)" }}>
                         <option value="">Subject(s) Needed</option>
-                        {["Mathematics", "Physics", "Chemistry", "All Three"].map(s => <option key={s}>{s}</option>)}
+                        {["Mathematics", "Science (Physics, Chemistry & Biology)", "Physics", "Chemistry", "All Three"].map(s => <option key={s}>{s}</option>)}
                       </select>
                       <textarea value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="Any specific requirements or questions..." rows={3}
                         className="col-span-2 px-3 py-2.5 rounded text-sm text-gray-800 border focus:outline-none resize-none"
@@ -1352,21 +1379,25 @@ function Footer({ setPage }: { setPage: (p: Page) => void }) {
     <footer style={{ background: "#080F04", borderTop: "1px solid rgba(245,240,228,0.08)" }}>
       <div className="max-w-6xl mx-auto px-5 py-10 grid md:grid-cols-4 gap-8">
         <div>
-          <div className="chalk text-xl font-bold mb-1">Scholars&apos; Board</div>
-          <div className="chalk text-sm opacity-50 mb-3">Academy</div>
-          <div className="chalk text-xs opacity-50 leading-relaxed">Premium CBSE &amp; State Board coaching for Classes IX–XII in Mathematics, Physics &amp; Chemistry.</div>
+          <div className="chalk text-xl font-bold mb-1">{BRAND.name}</div>
+          <div className="chalk text-sm opacity-50 mb-3">{BRAND.location}</div>
+          <div className="text-xs opacity-50 leading-relaxed" style={{ fontFamily: "DM Sans, sans-serif" }}>CBSE coaching from Class 9 through B.E/B.Tech in Mathematics, Physics &amp; Chemistry. Home tuition and online classes available.</div>
         </div>
         {[
-          { heading: "Pages", items: NAV_ITEMS },
-          { heading: "Subjects", items: [{ label: "Mathematics", page: "courses" as Page }, { label: "Physics", page: "courses" as Page }, { label: "Chemistry", page: "courses" as Page }] },
-          { heading: "Contact", items: [{ label: "+91 98765 43210", page: "contact" as Page }, { label: "info@scholarsboard.in", page: "contact" as Page }, { label: "Your City, India", page: "contact" as Page }] },
+          { heading: "Pages", items: NAV_ITEMS.map(({ label, page: p }) => ({ label, page: p, href: undefined as string | undefined })) },
+          { heading: "Subjects", items: [{ label: "Mathematics", page: "courses" as Page, href: undefined as string | undefined }, { label: "Physics", page: "courses" as Page, href: undefined }, { label: "Chemistry", page: "courses" as Page, href: undefined }] },
+          { heading: "Contact", items: [{ label: BRAND.phone1, page: "contact" as Page, href: `tel:${BRAND.phone1Href}` }, { label: BRAND.phone2, page: "contact" as Page, href: `tel:${BRAND.phone2Href}` }, { label: BRAND.email, page: "contact" as Page, href: `mailto:${BRAND.email}` }] },
         ].map(({ heading, items }) => (
           <div key={heading}>
             <div className="chalk text-sm font-bold opacity-60 uppercase tracking-widest mb-3">{heading}</div>
             <ul className="space-y-1.5">
-              {items.map(({ label, page: p }) => (
+              {items.map(({ label, page: p, href }) => (
                 <li key={label}>
-                  <button onClick={() => setPage(p)} className="chalk text-sm opacity-60 hover:opacity-90 transition-opacity text-left">{label}</button>
+                  {href ? (
+                    <a href={href} className="text-sm opacity-60 hover:opacity-90 transition-opacity text-left" style={{ fontFamily: "DM Sans, sans-serif" }}>{label}</a>
+                  ) : (
+                    <button onClick={() => setPage(p)} className="chalk text-sm opacity-60 hover:opacity-90 transition-opacity text-left">{label}</button>
+                  )}
                 </li>
               ))}
             </ul>
@@ -1374,7 +1405,7 @@ function Footer({ setPage }: { setPage: (p: Page) => void }) {
         ))}
       </div>
       <div className="text-center py-4" style={{ borderTop: "1px solid rgba(245,240,228,0.05)" }}>
-        <div className="chalk text-xs opacity-35">© 2025 Scholars&apos; Board Academy · All rights reserved · CBSE & State Board Coaching</div>
+        <div className="text-xs opacity-35" style={{ fontFamily: "DM Sans, sans-serif" }}>© 2025 {BRAND.name} · All rights reserved · CBSE Coaching, {BRAND.location}</div>
       </div>
     </footer>
   );

@@ -1,11 +1,23 @@
+# Sai Coaching Center — Website
 
-  # Interactive Classroom Website Design
+Website for Sai Coaching Center, Thoraipakkam — CBSE coaching for 9th & 10th
+(Maths & Science), 11th & 12th (Maths, Physics & Chemistry), and B.E/B.Tech
+(Maths, Physics & Chemistry). Home tuition and online classes also offered.
 
-  This is a code bundle for Interactive Classroom Website Design. The original project is available at https://www.figma.com/design/42NHtQSL7a8yoDwFptp3PQ/Interactive-Classroom-Website-Design.
+Built with React, Vite, and Tailwind CSS.
 
-  ## Running the code
+## Running locally
 
-  Run `npm i` to install the dependencies.
+```
+npm install
+npm run dev
+```
 
-  Run `npm run dev` to start the development server.
-  
+## Building for production
+
+```
+npm run build
+```
+
+This outputs a static site to `dist/`, ready to deploy to any static host
+(Netlify, Vercel, GitHub Pages, etc).

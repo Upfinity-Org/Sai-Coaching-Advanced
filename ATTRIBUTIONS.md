@@ -1,3 +1,3 @@
-This Figma Make file includes components from [shadcn/ui](https://ui.shadcn.com/) used under [MIT license](https://github.com/shadcn-ui/ui/blob/main/LICENSE.md).
-
-This Figma Make file includes photos from [Unsplash](https://unsplash.com) used under [license](https://unsplash.com/license).
+This project uses photos from [Unsplash](https://unsplash.com) (Gallery page)
+used under the [Unsplash license](https://unsplash.com/license). Replace
+these with real classroom/campus photos before final launch.
