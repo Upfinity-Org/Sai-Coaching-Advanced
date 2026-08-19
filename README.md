@@ -19,9 +19,3 @@ npm run dev
 ```
 npm run build
 ```
-
-This outputs a static site to `dist/`, ready to deploy to any static host
-(Netlify, Vercel, GitHub Pages, etc).
-=======
-# Sai-Coaching
->>>>>>> b2182e455e60fa956ac7eb09545cd61d71edd749
