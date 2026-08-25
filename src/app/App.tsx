@@ -11,7 +11,7 @@ import {
 /* =========================================================
    TYPES & DATA
    ========================================================= */
-type Page = "home" | "about" | "courses" | "gallery" | "blog" | "contact";
+type Page = "home" | "about" | "gallery" | "blog" | "contact";
 
 /* ---- Business info — single source of truth ----
    NOTE: Email is a placeholder (not on the source info card) — swap in the real one. */
@@ -28,16 +28,10 @@ const BRAND = {
 };
 
 const TEACHERS = [
-  { id: 1, name: "Mathematics Faculty", subject: "Mathematics", classes: "IX–B.E/B.Tech", pin: "#E05252", rotation: -2.5, bio: "Expert in Algebra, Calculus & Coordinate Geometry" },
-  { id: 2, name: "Physics Faculty", subject: "Physics", classes: "XI–B.E/B.Tech", pin: "#4A90D9", rotation: 1.5, bio: "Specialist in Mechanics, Optics & Modern Physics" },
-  { id: 3, name: "Chemistry Faculty", subject: "Chemistry", classes: "XI–B.E/B.Tech", pin: "#48A86A", rotation: -1, bio: "Expert in Organic, Inorganic & Physical Chemistry" },
+  { id: 1, name: "Mathematics Faculty", subject: "Mathematics", classes: "IX–XII", pin: "#E05252", rotation: -2.5, bio: "Expert in Algebra, Calculus & Coordinate Geometry" },
+  { id: 2, name: "Physics Faculty", subject: "Physics", classes: "XI–XII", pin: "#4A90D9", rotation: 1.5, bio: "Specialist in Mechanics, Optics & Modern Physics" },
+  { id: 3, name: "Chemistry Faculty", subject: "Chemistry", classes: "XI–XII", pin: "#48A86A", rotation: -1, bio: "Expert in Organic, Inorganic & Physical Chemistry" },
   { id: 4, name: "Science Faculty", subject: "Science", classes: "IX–X", pin: "#D4A017", rotation: 2.5, bio: "Strong foundation building for CBSE 9th & 10th Science" },
-];
-
-const COURSES = [
-  { grade: "CBSE — 9th & 10th", subjects: ["Mathematics", "Science — Physics, Chemistry & Biology"], board: "Maths & Science", color: "#6AAE45" },
-  { grade: "CBSE — 11th & 12th", subjects: ["Mathematics", "Physics", "Chemistry"], board: "Maths, Physics & Chemistry", color: "#4A8830" },
-  { grade: "B.E / B.Tech", subjects: ["Engineering Mathematics", "Engineering Physics", "Engineering Chemistry"], board: "Maths, Physics & Chemistry", color: "#3A7625" },
 ];
 
 const BLOG_POSTS = [
@@ -59,6 +53,11 @@ const GALLERY_IMGS = [
    GLOBAL STYLES (injected)
    ========================================================= */
 const GLOBAL_STYLES = `
+  :root {
+    --font-heading: 'Source Serif 4', 'Libre Baskerville', Georgia, serif;
+    --font-body: 'Inter', 'Source Sans 3', 'Segoe UI', sans-serif;
+  }
+
   @keyframes chalkWrite {
     0%   { opacity: 0; filter: blur(5px); transform: translateY(10px); }
     60%  { filter: blur(0.6px); }
@@ -90,15 +89,15 @@ const GLOBAL_STYLES = `
   }
 
   .chalk {
-    font-family: 'Caveat', cursive;
+    font-family: var(--font-heading);
     color: rgba(245,240,228,0.93);
     text-shadow: 0 0 12px rgba(245,240,228,0.15), 2px 2px 0 rgba(0,0,0,0.3);
     filter: blur(0.22px);
   }
-  .chalk-blue  { color: rgba(170,210,255,0.92); text-shadow: 0 0 10px rgba(170,210,255,0.25), 1px 1px 0 rgba(0,0,0,0.3); filter: blur(0.22px); font-family: 'Caveat', cursive; }
-  .chalk-yellow{ color: rgba(255,230,120,0.92); text-shadow: 0 0 10px rgba(255,230,120,0.25), 1px 1px 0 rgba(0,0,0,0.3); filter: blur(0.22px); font-family: 'Caveat', cursive; }
-  .chalk-pink  { color: rgba(255,175,175,0.90); text-shadow: 0 0 10px rgba(255,175,175,0.22), 1px 1px 0 rgba(0,0,0,0.3); filter: blur(0.22px); font-family: 'Caveat', cursive; }
-  .chalk-green { color: rgba(160,230,140,0.92); text-shadow: 0 0 10px rgba(160,230,140,0.22), 1px 1px 0 rgba(0,0,0,0.3); filter: blur(0.22px); font-family: 'Caveat', cursive; }
+  .chalk-blue  { color: rgba(170,210,255,0.92); text-shadow: 0 0 10px rgba(170,210,255,0.25), 1px 1px 0 rgba(0,0,0,0.3); filter: blur(0.22px); font-family: var(--font-heading); }
+  .chalk-yellow{ color: rgba(255,230,120,0.92); text-shadow: 0 0 10px rgba(255,230,120,0.25), 1px 1px 0 rgba(0,0,0,0.3); filter: blur(0.22px); font-family: var(--font-heading); }
+  .chalk-pink  { color: rgba(255,175,175,0.90); text-shadow: 0 0 10px rgba(255,175,175,0.22), 1px 1px 0 rgba(0,0,0,0.3); filter: blur(0.22px); font-family: var(--font-heading); }
+  .chalk-green { color: rgba(160,230,140,0.92); text-shadow: 0 0 10px rgba(160,230,140,0.22), 1px 1px 0 rgba(0,0,0,0.3); filter: blur(0.22px); font-family: var(--font-heading); }
 
   .board-bg {
     background:
@@ -148,7 +147,7 @@ const GLOBAL_STYLES = `
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: rgba(90,144,60,0.35); border-radius:3px; }
 
-  html { font-family: 'DM Sans', sans-serif; }
+  html { font-family: var(--font-body); }
   .font-mono-eq { font-family: 'JetBrains Mono', monospace; }
 `;
 
@@ -205,18 +204,18 @@ function MathChalkSVG({ drawn }: { drawn: boolean }) {
       {/* Parabola */}
       <path d="M 50 160 Q 115 30 180 155" stroke="rgba(170,210,255,0.85)" strokeWidth="2" strokeLinecap="round" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "0.5s" }} />
       {/* Quadratic label */}
-      <text x="190" y="80" fill="rgba(245,240,228,0.88)" fontSize="14" fontFamily="Caveat,cursive" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 1.5s" }}>y = ax² + bx + c</text>
+      <text x="190" y="80" fill="rgba(245,240,228,0.88)" fontSize="14" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 1.5s" }}>y = ax² + bx + c</text>
       {/* Pythagorean theorem */}
       <polygon points="260,170 360,170 260,90" stroke="rgba(255,230,120,0.8)" strokeWidth="1.5" fill="none" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "0.8s" }} />
-      <text x="265" y="185" fill="rgba(255,230,120,0.85)" fontSize="12" fontFamily="Caveat,cursive" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 1.8s" }}>a</text>
-      <text x="368" y="185" fill="rgba(255,230,120,0.85)" fontSize="12" fontFamily="Caveat,cursive" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 1.8s" }}>b</text>
-      <text x="245" y="130" fill="rgba(255,230,120,0.85)" fontSize="12" fontFamily="Caveat,cursive" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 1.8s" }}>c</text>
+      <text x="265" y="185" fill="rgba(255,230,120,0.85)" fontSize="12" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 1.8s" }}>a</text>
+      <text x="368" y="185" fill="rgba(255,230,120,0.85)" fontSize="12" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 1.8s" }}>b</text>
+      <text x="245" y="130" fill="rgba(255,230,120,0.85)" fontSize="12" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 1.8s" }}>c</text>
       {/* Right angle mark */}
       <polyline points="260,155 275,155 275,170" stroke="rgba(255,230,120,0.7)" strokeWidth="1.2" fill="none" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "1.2s" }} />
       {/* Formula */}
-      <text x="30" y="25" fill="rgba(160,230,140,0.88)" fontSize="13" fontFamily="Caveat,cursive" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2s" }}>a² + b² = c²</text>
+      <text x="30" y="25" fill="rgba(160,230,140,0.88)" fontSize="13" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2s" }}>a² + b² = c²</text>
       {/* Integration hint */}
-      <text x="200" y="155" fill="rgba(255,175,175,0.85)" fontSize="22" fontFamily="Caveat,cursive" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.3s" }}>∫ f(x)dx</text>
+      <text x="200" y="155" fill="rgba(255,175,175,0.85)" fontSize="22" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.3s" }}>∫ f(x)dx</text>
     </svg>
   );
 }
@@ -226,22 +225,22 @@ function PhysicsChalkSVG({ drawn }: { drawn: boolean }) {
     <svg viewBox="0 0 420 200" className="w-full max-w-md opacity-80" fill="none">
       {/* Wave */}
       <path d="M 20 100 C 50 60, 80 140, 110 100 C 140 60, 170 140, 200 100 C 230 60, 260 140, 290 100" stroke="rgba(170,210,255,0.8)" strokeWidth="2" strokeLinecap="round" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "0.3s" }} />
-      <text x="300" y="108" fill="rgba(170,210,255,0.85)" fontSize="12" fontFamily="Caveat,cursive" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 1.5s" }}>λ</text>
+      <text x="300" y="108" fill="rgba(170,210,255,0.85)" fontSize="12" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 1.5s" }}>λ</text>
       {/* Arrow for force */}
       <line x1="50" y1="160" x2="150" y2="160" stroke="rgba(255,230,120,0.85)" strokeWidth="2.5" strokeLinecap="round" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "0.6s" }} />
       <polygon points="150,155 165,160 150,165" fill="rgba(255,230,120,0.85)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.3s 1.2s" }} />
-      <text x="85" y="150" fill="rgba(255,230,120,0.9)" fontSize="13" fontFamily="Caveat,cursive" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 1.4s" }}>F⃗</text>
+      <text x="85" y="150" fill="rgba(255,230,120,0.9)" fontSize="13" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 1.4s" }}>F⃗</text>
       {/* Box being pushed */}
       <rect x="165" y="145" width="40" height="30" stroke="rgba(245,240,228,0.7)" strokeWidth="1.5" fill="none" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "1s" }} />
-      <text x="174" y="165" fill="rgba(245,240,228,0.75)" fontSize="11" fontFamily="Caveat,cursive" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2s" }}>m</text>
+      <text x="174" y="165" fill="rgba(245,240,228,0.75)" fontSize="11" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2s" }}>m</text>
       {/* Ground line */}
       <line x1="30" y1="175" x2="240" y2="175" stroke="rgba(245,240,228,0.4)" strokeWidth="1" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "0.8s" }} />
       {/* F=ma */}
-      <text x="270" y="50" fill="rgba(160,230,140,0.9)" fontSize="26" fontFamily="Caveat,cursive" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.2s" }}>F = ma</text>
+      <text x="270" y="50" fill="rgba(160,230,140,0.9)" fontSize="26" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.2s" }}>F = ma</text>
       {/* E=mc2 */}
-      <text x="270" y="90" fill="rgba(255,175,175,0.88)" fontSize="22" fontFamily="Caveat,cursive" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.5s" }}>E = mc²</text>
+      <text x="270" y="90" fill="rgba(255,175,175,0.88)" fontSize="22" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.5s" }}>E = mc²</text>
       {/* v = u+at */}
-      <text x="270" y="130" fill="rgba(255,230,120,0.85)" fontSize="18" fontFamily="Caveat,cursive" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.8s" }}>v = u + at</text>
+      <text x="270" y="130" fill="rgba(255,230,120,0.85)" fontSize="18" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.8s" }}>v = u + at</text>
     </svg>
   );
 }
@@ -258,21 +257,21 @@ function ChemistryChalkSVG({ drawn }: { drawn: boolean }) {
       {/* Benzene ring */}
       <polygon points={pts} stroke="rgba(160,230,140,0.85)" strokeWidth="2" fill="none" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "0.3s" }} />
       <circle cx={cx} cy={cy} r={r * 0.55} stroke="rgba(160,230,140,0.6)" strokeWidth="1.5" fill="none" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "0.9s" }} />
-      <text x="65" y="178" fill="rgba(160,230,140,0.85)" fontSize="12" fontFamily="Caveat,cursive" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 1.8s" }}>C₆H₆</text>
+      <text x="65" y="178" fill="rgba(160,230,140,0.85)" fontSize="12" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 1.8s" }}>C₆H₆</text>
       {/* Water molecule */}
       <circle cx="240" cy="80" r="16" stroke="rgba(170,210,255,0.85)" strokeWidth="1.8" fill="none" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "1.1s" }} />
       <circle cx="200" cy="55" r="10" stroke="rgba(245,240,228,0.75)" strokeWidth="1.5" fill="none" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "1.4s" }} />
       <circle cx="280" cy="55" r="10" stroke="rgba(245,240,228,0.75)" strokeWidth="1.5" fill="none" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "1.6s" }} />
       <line x1="228" y1="68" x2="210" y2="62" stroke="rgba(245,240,228,0.6)" strokeWidth="1.5" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "1.8s" }} />
       <line x1="252" y1="68" x2="270" y2="62" stroke="rgba(245,240,228,0.6)" strokeWidth="1.5" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "2s" }} />
-      <text x="228" y="82" fill="rgba(170,210,255,0.9)" fontSize="11" fontFamily="Caveat,cursive" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.2s" }}>O</text>
-      <text x="194" y="57" fill="rgba(245,240,228,0.8)" fontSize="11" fontFamily="Caveat,cursive" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.4s" }}>H</text>
-      <text x="277" y="57" fill="rgba(245,240,228,0.8)" fontSize="11" fontFamily="Caveat,cursive" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.4s" }}>H</text>
-      <text x="210" y="108" fill="rgba(170,210,255,0.88)" fontSize="13" fontFamily="Caveat,cursive" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.6s" }}>H₂O</text>
+      <text x="228" y="82" fill="rgba(170,210,255,0.9)" fontSize="11" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.2s" }}>O</text>
+      <text x="194" y="57" fill="rgba(245,240,228,0.8)" fontSize="11" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.4s" }}>H</text>
+      <text x="277" y="57" fill="rgba(245,240,228,0.8)" fontSize="11" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.4s" }}>H</text>
+      <text x="210" y="108" fill="rgba(170,210,255,0.88)" fontSize="13" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.6s" }}>H₂O</text>
       {/* Reaction */}
-      <text x="170" y="155" fill="rgba(255,230,120,0.88)" fontSize="13" fontFamily="Caveat,cursive" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.8s" }}>2H₂ + O₂ → 2H₂O</text>
+      <text x="170" y="155" fill="rgba(255,230,120,0.88)" fontSize="13" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.8s" }}>2H₂ + O₂ → 2H₂O</text>
       {/* CO2 */}
-      <text x="300" y="160" fill="rgba(255,175,175,0.85)" fontSize="18" fontFamily="Caveat,cursive" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 3s" }}>CO₂</text>
+      <text x="300" y="160" fill="rgba(255,175,175,0.85)" fontSize="18" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 3s" }}>CO₂</text>
     </svg>
   );
 }
@@ -348,7 +347,6 @@ function ChalkRule() {
 const NAV_ITEMS: { label: string; page: Page }[] = [
   { label: "Home", page: "home" },
   { label: "About", page: "about" },
-  { label: "Courses", page: "courses" },
   { label: "Gallery", page: "gallery" },
   { label: "Blog", page: "blog" },
   { label: "Contact", page: "contact" },
@@ -369,10 +367,10 @@ function Navbar({ page, setPage, dark, setDark }: { page: Page; setPage: (p: Pag
       <div className="max-w-7xl mx-auto px-5 flex items-center justify-between gap-4">
         {/* Logo */}
         <button onClick={() => { setPage("home"); setOpen(false); }} className="flex items-center gap-2.5 group">
-          <div className="w-9 h-9 rounded flex items-center justify-center text-white font-bold text-sm shrink-0" style={{ background: "linear-gradient(135deg, #2C5016, #5A9040)", boxShadow: "0 2px 12px rgba(90,144,64,0.4)", fontFamily: "DM Sans, sans-serif" }}>SC</div>
+          <div className="w-9 h-9 rounded flex items-center justify-center text-white font-bold text-sm shrink-0" style={{ background: "linear-gradient(135deg, #2C5016, #5A9040)", boxShadow: "0 2px 12px rgba(90,144,64,0.4)", fontFamily: "var(--font-body)" }}>SC</div>
           <div>
             <div className="chalk text-lg font-bold leading-none tracking-wide">Sai Coaching</div>
-            <div className="text-xs font-medium tracking-widest uppercase opacity-60" style={{ color: "rgba(245,240,228,0.7)", fontFamily: "DM Sans, sans-serif" }}>Center</div>
+            <div className="text-xs font-medium tracking-widest uppercase opacity-60" style={{ color: "rgba(245,240,228,0.7)", fontFamily: "var(--font-body)" }}>Center</div>
           </div>
         </button>
 
@@ -382,7 +380,7 @@ function Navbar({ page, setPage, dark, setDark }: { page: Page; setPage: (p: Pag
             <button key={p} onClick={() => setPage(p)}
               className="px-3 py-1.5 rounded transition-all duration-200"
               style={{
-                fontFamily: "Caveat, cursive", fontSize: "1.1rem", fontWeight: 600, letterSpacing: "0.03em",
+                fontFamily: "var(--font-heading)", fontSize: "1.1rem", fontWeight: 600, letterSpacing: "0.03em",
                 color: page === p ? "rgba(255,230,120,0.95)" : "rgba(245,240,228,0.75)",
                 textShadow: page === p ? "0 0 12px rgba(255,230,120,0.4)" : "none",
                 background: page === p ? "rgba(255,255,255,0.07)" : "transparent",
@@ -397,7 +395,7 @@ function Navbar({ page, setPage, dark, setDark }: { page: Page; setPage: (p: Pag
           <button onClick={() => setDark(!dark)} className="p-2 rounded-full transition-colors" style={{ background: "rgba(245,240,228,0.1)", color: "rgba(245,240,228,0.8)" }}>
             {dark ? <Sun size={17} /> : <Moon size={17} />}
           </button>
-          <button onClick={() => setPage("contact")} className="hidden md:flex items-center gap-2 px-4 py-2 rounded text-sm font-semibold transition-all" style={{ background: "rgba(245,240,228,0.12)", color: "rgba(245,240,228,0.9)", border: "1px solid rgba(245,240,228,0.25)", fontFamily: "DM Sans, sans-serif" }}>
+          <button onClick={() => setPage("contact")} className="hidden md:flex items-center gap-2 px-4 py-2 rounded text-sm font-semibold transition-all" style={{ background: "rgba(245,240,228,0.12)", color: "rgba(245,240,228,0.9)", border: "1px solid rgba(245,240,228,0.25)", fontFamily: "var(--font-body)" }}>
             Enquire Now <ArrowRight size={14} />
           </button>
           <button onClick={() => setOpen(!open)} className="md:hidden p-2" style={{ color: "rgba(245,240,228,0.8)" }}>
@@ -414,11 +412,11 @@ function Navbar({ page, setPage, dark, setDark }: { page: Page; setPage: (p: Pag
             style={{ background: dark ? "rgba(13,26,7,0.97)" : "rgba(44,80,22,0.97)", backdropFilter: "blur(12px)" }}>
             {NAV_ITEMS.map(({ label, page: p }) => (
               <button key={p} onClick={() => { setPage(p); setOpen(false); }} className="text-left px-3 py-2 rounded"
-                style={{ fontFamily: "Caveat, cursive", fontSize: "1.2rem", fontWeight: 600, color: page === p ? "rgba(255,230,120,0.95)" : "rgba(245,240,228,0.8)" }}>
+                style={{ fontFamily: "var(--font-heading)", fontSize: "1.2rem", fontWeight: 600, color: page === p ? "rgba(255,230,120,0.95)" : "rgba(245,240,228,0.8)" }}>
                 {label}
               </button>
             ))}
-            <button onClick={() => { setPage("contact"); setOpen(false); }} className="mt-2 px-4 py-2.5 rounded text-sm font-semibold text-center" style={{ background: "rgba(245,240,228,0.12)", color: "rgba(245,240,228,0.9)", border: "1px solid rgba(245,240,228,0.25)", fontFamily: "DM Sans, sans-serif" }}>
+            <button onClick={() => { setPage("contact"); setOpen(false); }} className="mt-2 px-4 py-2.5 rounded text-sm font-semibold text-center" style={{ background: "rgba(245,240,228,0.12)", color: "rgba(245,240,228,0.9)", border: "1px solid rgba(245,240,228,0.25)", fontFamily: "var(--font-body)" }}>
               Enquire Now
             </button>
           </motion.div>
@@ -436,9 +434,9 @@ function HeroSection({ setPage }: { setPage: (p: Page) => void }) {
   useEffect(() => { const t = setTimeout(() => setReady(true), 200); return () => clearTimeout(t); }, []);
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center px-4 pt-20 pb-8"
+    <section className="min-h-screen flex flex-col items-center justify-center px-4 pt-20 pb-8 page-bg"
       style={{ background: "linear-gradient(170deg, #0A1506 0%, #0F1E08 60%, #0D1A07 100%)" }}>
-      <div className="w-full max-w-6xl">
+      <div className="w-full max-w-7xl">
         <Board className="w-full">
           <div className="px-6 py-10 md:px-12 md:py-14 min-h-[60vh] flex flex-col justify-between">
             {/* Top corner annotations */}
@@ -479,10 +477,10 @@ function HeroSection({ setPage }: { setPage: (p: Page) => void }) {
 
               {/* CTA buttons */}
               <div className={`flex flex-col sm:flex-row gap-3 mt-2 chalk-anim ${ready ? "vis" : ""}`} style={{ animationDelay: "1.6s" }}>
-                <button onClick={() => setPage("courses")} className="flex items-center gap-2 px-6 py-3 font-semibold rounded transition-all hover:scale-105" style={{ background: "rgba(245,240,228,0.12)", border: "2px solid rgba(245,240,228,0.45)", color: "rgba(245,240,228,0.93)", fontFamily: "DM Sans, sans-serif" }}>
-                  Explore Courses <ChevronRight size={18} />
+                <button onClick={() => setPage("about")} className="flex items-center gap-2 px-6 py-3 font-semibold rounded transition-all hover:scale-105" style={{ background: "rgba(245,240,228,0.12)", border: "2px solid rgba(245,240,228,0.45)", color: "rgba(245,240,228,0.93)", fontFamily: "var(--font-body)" }}>
+                  Meet Our Faculty <ChevronRight size={18} />
                 </button>
-                <button onClick={() => setPage("contact")} className="flex items-center gap-2 px-6 py-3 font-semibold rounded transition-all hover:scale-105" style={{ background: "rgba(90,144,64,0.3)", border: "2px solid rgba(90,144,64,0.6)", color: "rgba(160,230,140,0.95)", fontFamily: "DM Sans, sans-serif" }}>
+                <button onClick={() => setPage("contact")} className="flex items-center gap-2 px-6 py-3 font-semibold rounded transition-all hover:scale-105" style={{ background: "rgba(90,144,64,0.3)", border: "2px solid rgba(90,144,64,0.6)", color: "rgba(160,230,140,0.95)", fontFamily: "var(--font-body)" }}>
                   Enquire Now <Send size={16} />
                 </button>
               </div>
@@ -490,7 +488,7 @@ function HeroSection({ setPage }: { setPage: (p: Page) => void }) {
 
             {/* Bottom stats row */}
             <div className={`flex flex-wrap justify-center gap-6 md:gap-10 pt-4 chalk-anim ${ready ? "vis" : ""}`} style={{ animationDelay: "2s" }}>
-              {[["3", "Subjects"], ["3", "Levels"], ["2", "Class Modes"], ["CBSE", "Board"]].map(([n, l]) => (
+              {[["3", "Subjects"], ["2", "Levels"], ["2", "Class Modes"], ["CBSE", "Board"]].map(([n, l]) => (
                 <div key={l} className="text-center">
                   <div className="chalk text-2xl md:text-3xl font-bold">{n}</div>
                   <div className="chalk text-sm opacity-60">{l}</div>
@@ -516,14 +514,14 @@ function SubjectsSection() {
   const chem = useReveal();
 
   const panels = [
-    { hook: math, title: "Mathematics", tag: "IX–B.E/Tech", color: "chalk-blue", icon: <Calculator size={22} />, svg: <MathChalkSVG drawn={math.vis} />, topics: ["Number Systems & Algebra", "Coordinate Geometry", "Calculus & Integration", "Statistics & Probability", "Trigonometry & Vectors"] },
-    { hook: phy, title: "Physics", tag: "IX–B.E/Tech", color: "chalk-yellow", icon: <Atom size={22} />, svg: <PhysicsChalkSVG drawn={phy.vis} />, topics: ["Mechanics & Laws of Motion", "Thermodynamics & Heat", "Waves, Sound & Light", "Electricity & Magnetism", "Modern Physics & Optics"] },
-    { hook: chem, title: "Chemistry", tag: "IX–B.E/Tech", color: "chalk-green", icon: <Zap size={22} />, svg: <ChemistryChalkSVG drawn={chem.vis} />, topics: ["Matter & Atomic Structure", "Periodic Table & Bonding", "Organic Chemistry", "Acids, Bases & Salts", "Electrochemistry & Polymers"] },
+    { hook: math, title: "Mathematics", tag: "IX–XII", color: "chalk-blue", icon: <Calculator size={22} />, svg: <MathChalkSVG drawn={math.vis} />, desc: "Concept-first coaching that builds problem-solving confidence for every CBSE board exam." },
+    { hook: phy, title: "Physics", tag: "XI–XII", color: "chalk-yellow", icon: <Atom size={22} />, svg: <PhysicsChalkSVG drawn={phy.vis} />, desc: "From first principles to numericals, taught the way physics is meant to be understood." },
+    { hook: chem, title: "Chemistry", tag: "XI–XII", color: "chalk-green", icon: <Zap size={22} />, svg: <ChemistryChalkSVG drawn={chem.vis} />, desc: "Clear explanations of reactions and mechanisms, built for lasting exam-day recall." },
   ];
 
   return (
-    <section className="py-16 px-4" style={{ background: "linear-gradient(180deg, #0F1E08 0%, #0D1A07 100%)" }}>
-      <div className="max-w-6xl mx-auto">
+    <section className="py-16 px-4 page-bg" style={{ background: "linear-gradient(180deg, #0F1E08 0%, #0D1A07 100%)" }}>
+      <div className="max-w-7xl mx-auto">
         <div className="text-center mb-10">
           <div className="chalk text-4xl md:text-5xl font-bold">What We Teach</div>
           <ChalkRule />
@@ -531,7 +529,7 @@ function SubjectsSection() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          {panels.map(({ hook, title, tag, color, icon, svg, topics }) => (
+          {panels.map(({ hook, title, tag, color, svg, desc }) => (
             <div ref={hook.ref} key={title}>
               <DusterSection>
                 <Board className="h-full">
@@ -545,14 +543,8 @@ function SubjectsSection() {
                     {/* SVG illustration */}
                     <div className="flex justify-center py-2">{svg}</div>
                     <ChalkRule />
-                    {/* Topics */}
-                    <ul className="space-y-1.5">
-                      {topics.map((t) => (
-                        <li key={t} className="chalk flex items-start gap-2 text-sm opacity-80">
-                          <span className="opacity-50 shrink-0 mt-0.5">→</span> {t}
-                        </li>
-                      ))}
-                    </ul>
+                    {/* Description */}
+                    <p className="chalk text-base opacity-80 leading-relaxed">{desc}</p>
                   </div>
                 </Board>
               </DusterSection>
@@ -567,7 +559,7 @@ function SubjectsSection() {
 function WhyUsSection({ setPage }: { setPage: (p: Page) => void }) {
   const { ref, vis } = useReveal();
   const reasons = [
-    { icon: <Award size={18} />, title: "Expert Faculty", desc: "Subject-specialist teachers with deep CBSE expertise across school and engineering levels" },
+    { icon: <Award size={18} />, title: "Expert Faculty", desc: "Subject-specialist teachers with deep CBSE expertise from Class IX through XII" },
     { icon: <Users size={18} />, title: "Small Batch Sizes", desc: "Maximum 15 students per batch — every student gets personal attention" },
     { icon: <Clock size={18} />, title: "Flexible Schedules", desc: "Morning, afternoon & evening slots to fit your school timetable" },
     { icon: <BookOpen size={18} />, title: "Curated Study Material", desc: "In-house notes, question banks, and solved CBSE papers" },
@@ -577,8 +569,8 @@ function WhyUsSection({ setPage }: { setPage: (p: Page) => void }) {
 
   return (
     <DusterSection>
-      <section className="py-16 px-4" style={{ background: "linear-gradient(180deg, #0D1A07 0%, #0F1E08 100%)" }}>
-        <div className="max-w-6xl mx-auto">
+      <section className="py-16 px-4 page-bg" style={{ background: "linear-gradient(180deg, #0D1A07 0%, #0F1E08 100%)" }}>
+        <div className="max-w-7xl mx-auto">
           <Board>
             <div ref={ref} className="px-8 py-10 md:px-14 md:py-12">
               <div className="mb-8 text-center">
@@ -606,7 +598,7 @@ function WhyUsSection({ setPage }: { setPage: (p: Page) => void }) {
                   ∴ Your child&apos;s success is our <span className="chalk-yellow">only equation.</span>
                 </div>
                 <button onClick={() => setPage("contact")} className="mt-5 inline-flex items-center gap-2 px-6 py-3 rounded font-semibold transition-all hover:scale-105"
-                  style={{ background: "rgba(245,240,228,0.1)", border: "2px solid rgba(245,240,228,0.35)", color: "rgba(245,240,228,0.9)", fontFamily: "DM Sans, sans-serif" }}>
+                  style={{ background: "rgba(245,240,228,0.1)", border: "2px solid rgba(245,240,228,0.35)", color: "rgba(245,240,228,0.9)", fontFamily: "var(--font-body)" }}>
                   Schedule a Free Demo Class <ArrowRight size={16} />
                 </button>
               </div>
@@ -618,56 +610,12 @@ function WhyUsSection({ setPage }: { setPage: (p: Page) => void }) {
   );
 }
 
-function CoursesPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
-  const { ref, vis } = useReveal();
-  return (
-    <DusterSection>
-      <section className="py-16 px-4" style={{ background: "linear-gradient(180deg, #0F1E08 0%, #0D1A07 100%)" }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <div className="chalk text-4xl md:text-5xl font-bold">Our Courses</div>
-            <ChalkRule />
-            <div className="chalk text-lg opacity-65 mt-2">Structured. Sequential. Scored.</div>
-          </div>
-          <div ref={ref} className="grid sm:grid-cols-1 md:grid-cols-3 gap-6">
-            {COURSES.map(({ grade, subjects, board, color }, i) => (
-              <div key={grade} className={`chalk-anim ${vis ? "vis" : ""}`} style={{ animationDelay: `${i * 0.15}s` }}>
-                <Board className="h-full">
-                  <div className="p-5 flex flex-col gap-3 h-full">
-                    <div className="chalk-yellow text-2xl font-bold">{grade}</div>
-                    <div className="chalk text-xs opacity-55 font-mono-eq" style={{ fontFamily: "JetBrains Mono, monospace" }}>{board}</div>
-                    <ChalkRule />
-                    <ul className="flex-1 space-y-1.5">
-                      {subjects.map((s) => (
-                        <li key={s} className="chalk text-sm opacity-80 flex items-start gap-1.5"><span className="opacity-40">•</span>{s}</li>
-                      ))}
-                    </ul>
-                    <button onClick={() => setPage("courses")} className="mt-2 chalk text-sm opacity-70 flex items-center gap-1 hover:opacity-100 transition-opacity">
-                      View Syllabus <ChevronRight size={14} />
-                    </button>
-                  </div>
-                </Board>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-8">
-            <button onClick={() => setPage("courses")} className="inline-flex items-center gap-2 px-6 py-3 rounded font-semibold"
-              style={{ background: "rgba(245,240,228,0.08)", border: "2px solid rgba(245,240,228,0.28)", color: "rgba(245,240,228,0.85)", fontFamily: "DM Sans, sans-serif" }}>
-              View Full Curriculum <ArrowRight size={16} />
-            </button>
-          </div>
-        </div>
-      </section>
-    </DusterSection>
-  );
-}
-
 function TeachersPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
   const { ref, vis } = useReveal();
   return (
     <DusterSection>
-      <section className="py-16 px-4" style={{ background: "linear-gradient(180deg, #0D1A07 0%, #0F1E08 100%)" }}>
-        <div className="max-w-6xl mx-auto">
+      <section className="py-16 px-4 page-bg" style={{ background: "linear-gradient(180deg, #0D1A07 0%, #0F1E08 100%)" }}>
+        <div className="max-w-7xl mx-auto">
           <div className="text-center mb-10">
             <div className="chalk text-4xl md:text-5xl font-bold">Meet the Faculty</div>
             <ChalkRule />
@@ -711,7 +659,7 @@ function TeachersPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
           </div>
           <div className="text-center mt-8">
             <button onClick={() => setPage("about")} className="inline-flex items-center gap-2 px-6 py-3 rounded font-semibold"
-              style={{ background: "rgba(245,240,228,0.08)", border: "2px solid rgba(245,240,228,0.28)", color: "rgba(245,240,228,0.85)", fontFamily: "DM Sans, sans-serif" }}>
+              style={{ background: "rgba(245,240,228,0.08)", border: "2px solid rgba(245,240,228,0.28)", color: "rgba(245,240,228,0.85)", fontFamily: "var(--font-body)" }}>
               Full Faculty Profiles <ArrowRight size={16} />
             </button>
           </div>
@@ -725,8 +673,8 @@ function GalleryPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
   const { ref, vis } = useReveal();
   return (
     <DusterSection>
-      <section className="py-16 px-4" style={{ background: "linear-gradient(180deg, #0F1E08 0%, #0D1A07 100%)" }}>
-        <div className="max-w-6xl mx-auto">
+      <section className="py-16 px-4 page-bg" style={{ background: "linear-gradient(180deg, #0F1E08 0%, #0D1A07 100%)" }}>
+        <div className="max-w-7xl mx-auto">
           <div className="text-center mb-10">
             <div className="chalk text-4xl md:text-5xl font-bold">Classroom Memories</div>
             <ChalkRule />
@@ -739,14 +687,14 @@ function GalleryPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
                   <div className="overflow-hidden" style={{ aspectRatio: i % 3 === 1 ? "3/4" : "4/3" }}>
                     <img src={`https://images.unsplash.com/${id}?w=400&h=300&fit=crop&auto=format`} alt={caption} className="w-full h-full object-cover" />
                   </div>
-                  <div className="text-center mt-2 text-xs text-gray-600" style={{ fontFamily: "Caveat, cursive" }}>{caption}</div>
+                  <div className="text-center mt-2 text-xs text-gray-600" style={{ fontFamily: "var(--font-heading)" }}>{caption}</div>
                 </div>
               </div>
             ))}
           </div>
           <div className="text-center mt-8">
             <button onClick={() => setPage("gallery")} className="inline-flex items-center gap-2 px-6 py-3 rounded font-semibold"
-              style={{ background: "rgba(245,240,228,0.08)", border: "2px solid rgba(245,240,228,0.28)", color: "rgba(245,240,228,0.85)", fontFamily: "DM Sans, sans-serif" }}>
+              style={{ background: "rgba(245,240,228,0.08)", border: "2px solid rgba(245,240,228,0.28)", color: "rgba(245,240,228,0.85)", fontFamily: "var(--font-body)" }}>
               View Full Gallery <Camera size={16} />
             </button>
           </div>
@@ -760,8 +708,8 @@ function BlogPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
   const { ref, vis } = useReveal();
   return (
     <DusterSection>
-      <section className="py-16 px-4" style={{ background: "linear-gradient(180deg, #0D1A07 0%, #0F1E08 100%)" }}>
-        <div className="max-w-6xl mx-auto">
+      <section className="py-16 px-4 page-bg" style={{ background: "linear-gradient(180deg, #0D1A07 0%, #0F1E08 100%)" }}>
+        <div className="max-w-7xl mx-auto">
           <div className="text-center mb-10">
             <div className="chalk text-4xl md:text-5xl font-bold">Class Notes &amp; Blog</div>
             <ChalkRule />
@@ -775,12 +723,12 @@ function BlogPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
                   <div className="h-2" style={{ background: subjectColor }} />
                   <div className="lined-paper p-5 h-full">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ background: subjectColor + "20", color: subjectColor, fontFamily: "DM Sans, sans-serif" }}>{subject}</span>
-                      <span className="text-xs text-gray-400" style={{ fontFamily: "Caveat, cursive" }}>pg. {pg}</span>
+                      <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ background: subjectColor + "20", color: subjectColor, fontFamily: "var(--font-body)" }}>{subject}</span>
+                      <span className="text-xs text-gray-400" style={{ fontFamily: "var(--font-heading)" }}>pg. {pg}</span>
                     </div>
-                    <h3 className="text-base font-bold leading-snug text-gray-800 mb-2" style={{ fontFamily: "Caveat, cursive", fontSize: "1.1rem" }}>{title}</h3>
-                    <p className="text-sm text-gray-600 leading-relaxed mb-4" style={{ fontFamily: "DM Sans, sans-serif" }}>{excerpt}</p>
-                    <div className="flex items-center justify-between text-xs text-gray-400 border-t border-gray-200 pt-3 mt-auto" style={{ fontFamily: "DM Sans, sans-serif" }}>
+                    <h3 className="text-base font-bold leading-snug text-gray-800 mb-2" style={{ fontFamily: "var(--font-heading)", fontSize: "1.1rem" }}>{title}</h3>
+                    <p className="text-sm text-gray-600 leading-relaxed mb-4" style={{ fontFamily: "var(--font-body)" }}>{excerpt}</p>
+                    <div className="flex items-center justify-between text-xs text-gray-400 border-t border-gray-200 pt-3 mt-auto" style={{ fontFamily: "var(--font-body)" }}>
                       <span>{date}</span>
                       <span>{readTime}</span>
                     </div>
@@ -791,7 +739,7 @@ function BlogPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
           </div>
           <div className="text-center mt-8">
             <button onClick={() => setPage("blog")} className="inline-flex items-center gap-2 px-6 py-3 rounded font-semibold"
-              style={{ background: "rgba(245,240,228,0.08)", border: "2px solid rgba(245,240,228,0.28)", color: "rgba(245,240,228,0.85)", fontFamily: "DM Sans, sans-serif" }}>
+              style={{ background: "rgba(245,240,228,0.08)", border: "2px solid rgba(245,240,228,0.28)", color: "rgba(245,240,228,0.85)", fontFamily: "var(--font-body)" }}>
               Read All Notes <BookOpen size={16} />
             </button>
           </div>
@@ -805,8 +753,8 @@ function CTASection({ setPage }: { setPage: (p: Page) => void }) {
   const { ref, vis } = useReveal();
   return (
     <DusterSection>
-      <section className="py-16 px-4" style={{ background: "linear-gradient(180deg, #0F1E08 0%, #0A1506 100%)" }}>
-        <div className="max-w-4xl mx-auto" ref={ref}>
+      <section className="py-16 px-4 page-bg" style={{ background: "linear-gradient(180deg, #0F1E08 0%, #0A1506 100%)" }}>
+        <div className="max-w-5xl mx-auto" ref={ref}>
           <Board>
             <div className="px-8 py-12 md:px-16 md:py-16 text-center">
               <div className={`chalk-anim ${vis ? "vis" : ""} space-y-4`}>
@@ -820,16 +768,16 @@ function CTASection({ setPage }: { setPage: (p: Page) => void }) {
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
                   <button onClick={() => setPage("contact")} className="inline-flex items-center gap-2 px-8 py-4 rounded font-bold text-lg transition-all hover:scale-105"
-                    style={{ background: "rgba(90,144,64,0.35)", border: "2px solid rgba(160,230,140,0.6)", color: "rgba(160,230,140,0.95)", fontFamily: "DM Sans, sans-serif" }}>
+                    style={{ background: "rgba(90,144,64,0.35)", border: "2px solid rgba(160,230,140,0.6)", color: "rgba(160,230,140,0.95)", fontFamily: "var(--font-body)" }}>
                     Enquire Now <Send size={18} />
                   </button>
-                  <button onClick={() => setPage("courses")} className="inline-flex items-center gap-2 px-8 py-4 rounded font-bold text-lg transition-all hover:scale-105"
-                    style={{ background: "rgba(245,240,228,0.08)", border: "2px solid rgba(245,240,228,0.35)", color: "rgba(245,240,228,0.9)", fontFamily: "DM Sans, sans-serif" }}>
-                    View Courses <BookOpen size={18} />
+                  <button onClick={() => setPage("about")} className="inline-flex items-center gap-2 px-8 py-4 rounded font-bold text-lg transition-all hover:scale-105"
+                    style={{ background: "rgba(245,240,228,0.08)", border: "2px solid rgba(245,240,228,0.35)", color: "rgba(245,240,228,0.9)", fontFamily: "var(--font-body)" }}>
+                    Meet Our Faculty <GraduationCap size={18} />
                   </button>
                 </div>
                 {/* Contact quick links */}
-                <div className="flex flex-wrap justify-center gap-6 mt-6 opacity-80" style={{ fontFamily: "DM Sans, sans-serif" }}>
+                <div className="flex flex-wrap justify-center gap-6 mt-6 opacity-80" style={{ fontFamily: "var(--font-body)" }}>
                   <a href={`tel:${BRAND.phone1Href}`} className="flex items-center gap-1.5 text-sm hover:opacity-100 transition-opacity"><Phone size={14} /> {BRAND.phone1}</a>
                   <a href={`tel:${BRAND.phone2Href}`} className="flex items-center gap-1.5 text-sm hover:opacity-100 transition-opacity"><Phone size={14} /> {BRAND.phone2}</a>
                   <a href={`mailto:${BRAND.email}`} className="flex items-center gap-1.5 text-sm hover:opacity-100 transition-opacity"><Mail size={14} /> {BRAND.email}</a>
@@ -850,7 +798,6 @@ function HomePage({ setPage }: { setPage: (p: Page) => void }) {
       <HeroSection setPage={setPage} />
       <SubjectsSection />
       <WhyUsSection setPage={setPage} />
-      <CoursesPreviewSection setPage={setPage} />
       <TeachersPreviewSection setPage={setPage} />
       <GalleryPreviewSection setPage={setPage} />
       <BlogPreviewSection setPage={setPage} />
@@ -867,10 +814,10 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
   const { ref, vis } = useReveal();
 
   return (
-    <div className="min-h-screen pt-20" style={{ background: "linear-gradient(170deg, #0A1506 0%, #0D1A07 100%)" }}>
+    <div className="min-h-screen pt-20 page-bg" style={{ background: "linear-gradient(170deg, #0A1506 0%, #0D1A07 100%)" }}>
       {/* Cork board section */}
       <section className="py-14 px-4">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="text-center mb-10">
             <div className="chalk text-4xl md:text-5xl font-bold">Our Faculty</div>
             <ChalkRule />
@@ -898,19 +845,19 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
                           <GraduationCap size={24} style={{ color: "rgba(100,80,60,0.5)" }} />
                         </div>
                         <div className="w-20 h-20 rounded-t-full" style={{ background: "rgba(100,80,60,0.15)", border: "2px dashed rgba(100,80,60,0.2)" }} />
-                        <div className="absolute bottom-2 left-0 right-0 text-center text-xs text-gray-400" style={{ fontFamily: "Caveat, cursive" }}>Photo Placeholder</div>
+                        <div className="absolute bottom-2 left-0 right-0 text-center text-xs text-gray-400" style={{ fontFamily: "var(--font-heading)" }}>Photo Placeholder</div>
                         {/* Subject color strip */}
                         <div className="absolute top-0 left-0 right-0 h-1.5" style={{ background: pin }} />
                       </div>
                       {/* Info */}
                       <div className="p-3 border-t border-gray-200">
-                        <div className="text-sm font-bold text-gray-800" style={{ fontFamily: "Caveat, cursive", fontSize: "1rem" }}>{name}</div>
-                        <div className="text-xs font-semibold mt-0.5" style={{ color: pin, fontFamily: "DM Sans, sans-serif" }}>{subject}</div>
-                        <div className="text-xs text-gray-500 mt-0.5" style={{ fontFamily: "DM Sans, sans-serif" }}>Classes {classes}</div>
+                        <div className="text-sm font-bold text-gray-800" style={{ fontFamily: "var(--font-heading)", fontSize: "1rem" }}>{name}</div>
+                        <div className="text-xs font-semibold mt-0.5" style={{ color: pin, fontFamily: "var(--font-body)" }}>{subject}</div>
+                        <div className="text-xs text-gray-500 mt-0.5" style={{ fontFamily: "var(--font-body)" }}>Classes {classes}</div>
                         {selected === id && (
-                          <div className="mt-2 text-xs text-gray-600 leading-snug border-t border-gray-200 pt-2" style={{ fontFamily: "DM Sans, sans-serif" }}>{bio}</div>
+                          <div className="mt-2 text-xs text-gray-600 leading-snug border-t border-gray-200 pt-2" style={{ fontFamily: "var(--font-body)" }}>{bio}</div>
                         )}
-                        <div className="mt-1.5 text-xs text-gray-400 flex items-center gap-1" style={{ fontFamily: "Caveat, cursive" }}>
+                        <div className="mt-1.5 text-xs text-gray-400 flex items-center gap-1" style={{ fontFamily: "var(--font-heading)" }}>
                           {selected === id ? "↑ tap to close" : "→ tap to know more"}
                         </div>
                       </div>
@@ -926,7 +873,7 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
       {/* School story on the board */}
       <DusterSection>
         <section className="py-14 px-4">
-          <div className="max-w-5xl mx-auto">
+          <div className="max-w-6xl mx-auto">
             <Board>
               <div className="px-8 py-12 md:px-14 md:py-14">
                 <div className="chalk text-4xl md:text-5xl font-bold mb-4">Our Story</div>
@@ -938,7 +885,7 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
                       {BRAND.name} was founded with one belief: that every student who struggles with Mathematics or Science is simply waiting for the right teacher. Our founders — passionate educators themselves — set up a small tuition room in {BRAND.location} and began with a handful of students.
                     </div>
                     <div className="chalk text-base opacity-80 leading-relaxed">
-                      Since then, we've grown from school-level CBSE coaching into Maths, Physics &amp; Chemistry support for B.E and B.Tech students too — with home tuition and online classes for families who can't make it in. The board on our wall has never stopped being written upon.
+                      Since then, we've grown into a full CBSE coaching center for Classes IX through XII in Mathematics, Physics &amp; Chemistry — with home tuition and online classes for families who can't make it in. The board on our wall has never stopped being written upon.
                     </div>
                   </div>
                   <div className="space-y-4">
@@ -960,7 +907,7 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
                 {/* Stats row */}
                 <div className="mt-10 pt-6" style={{ borderTop: "1.5px solid rgba(245,240,228,0.2)" }}>
                   <div className="flex flex-wrap justify-around gap-6">
-                    {[["9th–B.E/Tech", "Levels Taught"], ["CBSE", "Board"], ["2", "Class Modes"], ["4", "Expert Faculty"]].map(([n, l]) => (
+                    {[["9th–12th", "Levels Taught"], ["CBSE", "Board"], ["2", "Class Modes"], ["4", "Expert Faculty"]].map(([n, l]) => (
                       <div key={l} className="text-center">
                         <div className="chalk text-3xl font-bold chalk-yellow">{n}</div>
                         <div className="chalk text-sm opacity-60">{l}</div>
@@ -976,149 +923,10 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
 
       <div className="text-center py-8">
         <button onClick={() => setPage("contact")} className="inline-flex items-center gap-2 px-6 py-3 rounded font-semibold"
-          style={{ background: "rgba(245,240,228,0.08)", border: "2px solid rgba(245,240,228,0.3)", color: "rgba(245,240,228,0.85)", fontFamily: "DM Sans, sans-serif" }}>
+          style={{ background: "rgba(245,240,228,0.08)", border: "2px solid rgba(245,240,228,0.3)", color: "rgba(245,240,228,0.85)", fontFamily: "var(--font-body)" }}>
           Get in Touch <ArrowRight size={16} />
         </button>
       </div>
-    </div>
-  );
-}
-
-/* =========================================================
-   COURSES PAGE
-   ========================================================= */
-function CoursesPage({ setPage }: { setPage: (p: Page) => void }) {
-  const [activeGrade, setActiveGrade] = useState(0);
-  const { ref, vis } = useReveal();
-
-  const fullCourses = [
-    {
-      grade: "Class IX", board: "CBSE — Maths & Science",
-      math: ["Real Numbers & Number Systems", "Polynomials & Algebraic Identities", "Linear Equations in Two Variables", "Coordinate Geometry Basics", "Triangles & Quadrilaterals", "Circles & Areas", "Surface Areas & Volumes", "Statistics & Probability"],
-      physics: ["Motion & Laws of Motion", "Gravitation", "Work, Energy & Power", "Sound & Wave Basics", "Matter in Our Surroundings"],
-      chemistry: ["Atoms & Molecules", "Structure of the Atom", "Mixtures & Solutions", "Is Matter Around Us Pure?", "Chemical Reactions Intro"],
-    },
-    {
-      grade: "Class X", board: "CBSE — Maths & Science",
-      math: ["Real Numbers (Euclid's Division)", "Polynomials — Degree & Zeroes", "Pair of Linear Equations", "Quadratic Equations", "Arithmetic Progressions", "Triangles & Similarity", "Circles — Tangents", "Constructions", "Coordinate Geometry", "Trigonometry & Applications", "Areas Related to Circles", "Statistics & Probability"],
-      physics: ["Light — Reflection & Refraction", "Human Eye & Defects", "Electricity — Ohm's Law", "Magnetic Effects of Current", "Sources of Energy"],
-      chemistry: ["Chemical Reactions & Equations", "Acids, Bases & Salts", "Metals & Non-Metals", "Carbon & Organic Compounds", "Periodic Classification"],
-    },
-    {
-      grade: "Class XI", board: "CBSE — Maths, Physics & Chemistry",
-      math: ["Sets & Relations", "Trigonometric Functions", "Principle of Mathematical Induction", "Complex Numbers", "Linear Inequalities", "Permutations & Combinations", "Binomial Theorem", "Sequences & Series", "Straight Lines & Conics", "3D Geometry Intro", "Limits & Derivatives", "Statistics & Probability"],
-      physics: ["Units & Measurement", "Kinematics in 1D & 2D", "Laws of Motion", "Work, Energy & Power", "Systems of Particles", "Gravitation", "Mechanical Properties", "Thermodynamics", "Kinetic Theory", "Waves & Oscillations"],
-      chemistry: ["Some Basic Concepts of Chemistry", "Atomic Structure", "Classification of Elements", "Chemical Bonding", "States of Matter", "Thermodynamics", "Equilibrium", "Redox Reactions", "Hydrogen & s-Block", "Organic Chemistry — Introduction", "Hydrocarbons"],
-    },
-    {
-      grade: "Class XII", board: "CBSE — Maths, Physics & Chemistry",
-      math: ["Relations & Functions", "Inverse Trigonometric Functions", "Matrices & Determinants", "Continuity & Differentiability", "Applications of Derivatives", "Integrals (Definite & Indefinite)", "Application of Integrals", "Differential Equations", "Vector Algebra", "3D Geometry", "Linear Programming", "Probability"],
-      physics: ["Electrostatics", "Current Electricity", "Magnetic Effects", "EMI & AC Circuits", "Electromagnetic Waves", "Ray & Wave Optics", "Dual Nature of Matter", "Atoms & Nuclei", "Semiconductor Electronics"],
-      chemistry: ["Solid State", "Solutions & Colligative Properties", "Electrochemistry", "Chemical Kinetics", "Surface Chemistry", "General Principles of Metals", "p-Block Elements", "d & f Block", "Coordination Compounds", "Haloalkanes & Haloarenes", "Alcohols, Phenols, Ethers", "Aldehydes & Ketones", "Amines", "Biomolecules & Polymers"],
-    },
-    {
-      grade: "B.E / B.Tech", board: "Engineering — Maths, Physics & Chemistry",
-      math: ["Differential & Integral Calculus", "Partial Derivatives & Multiple Integrals", "Ordinary Differential Equations", "Vector Calculus", "Linear Algebra & Matrices", "Complex Analysis Basics", "Laplace Transforms", "Numerical Methods"],
-      physics: ["Wave Optics & Interference", "Quantum Mechanics Basics", "Semiconductor Physics", "Electromagnetic Theory", "Laser & Fibre Optics", "Crystal Structures & Solid State Physics"],
-      chemistry: ["Electrochemistry & Corrosion", "Polymers & Composites", "Water Treatment & Analysis", "Fuels & Combustion", "Engineering Materials", "Spectroscopy Basics"],
-    },
-  ];
-
-  const course = fullCourses[activeGrade];
-
-  return (
-    <div className="min-h-screen pt-20" style={{ background: "linear-gradient(170deg, #0A1506 0%, #0D1A07 100%)" }}>
-      <section className="py-12 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-8">
-            <div className="chalk text-4xl md:text-5xl font-bold">Lesson Planner</div>
-            <ChalkRule />
-            <div className="chalk text-lg opacity-65 mt-2">Select your class. See the complete curriculum.</div>
-          </div>
-
-          {/* Grade tabs — look like tab dividers on a lesson planner */}
-          <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
-            {fullCourses.map(({ grade }, i) => (
-              <button key={grade} onClick={() => setActiveGrade(i)} className="shrink-0 px-5 py-2.5 rounded-t font-bold transition-all"
-                style={{
-                  fontFamily: "Caveat, cursive", fontSize: "1.1rem",
-                  background: activeGrade === i ? "rgba(245,240,228,0.1)" : "rgba(245,240,228,0.04)",
-                  border: "1.5px solid rgba(245,240,228,0.2)",
-                  borderBottom: activeGrade === i ? "none" : "1.5px solid rgba(245,240,228,0.2)",
-                  color: activeGrade === i ? "rgba(255,230,120,0.95)" : "rgba(245,240,228,0.6)",
-                }}>
-                {grade}
-              </button>
-            ))}
-          </div>
-
-          {/* Lesson planner board */}
-          <Board>
-            <div ref={ref} className="p-6 md:p-10">
-              <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-                <div className="chalk text-3xl md:text-4xl font-bold">{course.grade} — Full Syllabus</div>
-                <div className="chalk text-sm opacity-60 font-mono-eq" style={{ fontFamily: "JetBrains Mono, monospace" }}>{course.board}</div>
-              </div>
-              <ChalkRule />
-
-              <div className="grid md:grid-cols-3 gap-8 mt-6">
-                {/* Mathematics */}
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 chalk-blue text-xl font-bold">
-                    <Calculator size={18} /> Mathematics
-                  </div>
-                  <ChalkRule />
-                  <ol className="space-y-1.5">
-                    {course.math.map((t, i) => (
-                      <li key={t} className="chalk flex items-start gap-2 text-sm opacity-80">
-                        <span className="chalk-blue shrink-0 text-xs mt-0.5" style={{ fontFamily: "JetBrains Mono, monospace" }}>{String(i + 1).padStart(2, "0")}.</span> {t}
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-                {/* Physics */}
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 chalk-yellow text-xl font-bold">
-                    <Atom size={18} /> Physics
-                  </div>
-                  <ChalkRule />
-                  <ol className="space-y-1.5">
-                    {course.physics.map((t, i) => (
-                      <li key={t} className="chalk flex items-start gap-2 text-sm opacity-80">
-                        <span className="chalk-yellow shrink-0 text-xs mt-0.5" style={{ fontFamily: "JetBrains Mono, monospace" }}>{String(i + 1).padStart(2, "0")}.</span> {t}
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-                {/* Chemistry */}
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 chalk-green text-xl font-bold">
-                    <Zap size={18} /> Chemistry
-                  </div>
-                  <ChalkRule />
-                  <ol className="space-y-1.5">
-                    {course.chemistry.map((t, i) => (
-                      <li key={t} className="chalk flex items-start gap-2 text-sm opacity-80">
-                        <span className="chalk-green shrink-0 text-xs mt-0.5" style={{ fontFamily: "JetBrains Mono, monospace" }}>{String(i + 1).padStart(2, "0")}.</span> {t}
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              </div>
-
-              <div className="mt-8 pt-6 flex flex-wrap gap-4 items-center justify-between" style={{ borderTop: "1.5px solid rgba(245,240,228,0.15)" }}>
-                <div className="chalk text-sm opacity-60">
-                  Full CBSE syllabus covered ✓ &nbsp;|&nbsp; Regular tests included ✓ &nbsp;|&nbsp; Board exam strategies ✓
-                </div>
-                <button onClick={() => setPage("contact")} className="inline-flex items-center gap-2 px-5 py-2.5 rounded font-semibold text-sm"
-                  style={{ background: "rgba(245,240,228,0.1)", border: "2px solid rgba(245,240,228,0.35)", color: "rgba(245,240,228,0.9)", fontFamily: "DM Sans, sans-serif" }}>
-                  Enroll in {course.grade} <Send size={14} />
-                </button>
-              </div>
-            </div>
-          </Board>
-        </div>
-      </section>
     </div>
   );
 }
@@ -1131,9 +939,9 @@ function GalleryPage() {
   const extended = [...GALLERY_IMGS, ...GALLERY_IMGS.slice(0, 3)];
 
   return (
-    <div className="min-h-screen pt-20" style={{ background: "linear-gradient(170deg, #0A1506 0%, #0D1A07 100%)" }}>
+    <div className="min-h-screen pt-20 page-bg" style={{ background: "linear-gradient(170deg, #0A1506 0%, #0D1A07 100%)" }}>
       <section className="py-14 px-4">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="text-center mb-10">
             <div className="chalk text-4xl md:text-5xl font-bold">Memory Wall</div>
             <ChalkRule />
@@ -1156,7 +964,7 @@ function GalleryPage() {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     </div>
-                    <div className="text-center mt-2 text-gray-600 text-sm" style={{ fontFamily: "Caveat, cursive" }}>{caption}</div>
+                    <div className="text-center mt-2 text-gray-600 text-sm" style={{ fontFamily: "var(--font-heading)" }}>{caption}</div>
                   </div>
                 </div>
               ))}
@@ -1185,9 +993,9 @@ function BlogPage() {
   ];
 
   return (
-    <div className="min-h-screen pt-20" style={{ background: "linear-gradient(170deg, #0A1506 0%, #0D1A07 100%)" }}>
+    <div className="min-h-screen pt-20 page-bg" style={{ background: "linear-gradient(170deg, #0A1506 0%, #0D1A07 100%)" }}>
       <section className="py-14 px-4">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
             <div className="chalk text-4xl md:text-5xl font-bold">Class Notes &amp; Blog</div>
             <ChalkRule />
@@ -1211,12 +1019,12 @@ function BlogPage() {
                   <div className="text-2xl font-bold text-gray-200 shrink-0 w-8 text-right" style={{ fontFamily: "JetBrains Mono, monospace" }}>{pg}</div>
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-1.5">
-                      <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ background: subjectColor + "18", color: subjectColor, fontFamily: "DM Sans, sans-serif" }}>{subject}</span>
-                      <span className="text-xs text-gray-400" style={{ fontFamily: "DM Sans, sans-serif" }}>{date} · {readTime}</span>
+                      <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ background: subjectColor + "18", color: subjectColor, fontFamily: "var(--font-body)" }}>{subject}</span>
+                      <span className="text-xs text-gray-400" style={{ fontFamily: "var(--font-body)" }}>{date} · {readTime}</span>
                     </div>
-                    <h2 className="text-lg md:text-xl font-bold text-gray-800 leading-snug mb-2 group-hover:text-gray-900" style={{ fontFamily: "Caveat, cursive", fontSize: "1.25rem" }}>{title}</h2>
-                    <p className="text-sm text-gray-600 leading-relaxed" style={{ fontFamily: "DM Sans, sans-serif" }}>{excerpt}</p>
-                    <div className="mt-3 flex items-center gap-1 text-sm font-semibold" style={{ color: subjectColor, fontFamily: "DM Sans, sans-serif" }}>
+                    <h2 className="text-lg md:text-xl font-bold text-gray-800 leading-snug mb-2 group-hover:text-gray-900" style={{ fontFamily: "var(--font-heading)", fontSize: "1.25rem" }}>{title}</h2>
+                    <p className="text-sm text-gray-600 leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{excerpt}</p>
+                    <div className="mt-3 flex items-center gap-1 text-sm font-semibold" style={{ color: subjectColor, fontFamily: "var(--font-body)" }}>
                       Read full note <ChevronRight size={14} />
                     </div>
                   </div>
@@ -1235,18 +1043,38 @@ function BlogPage() {
    ========================================================= */
 function ContactPage() {
   const [form, setForm] = useState({ name: "", phone: "", email: "", grade: "", subject: "", message: "" });
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const { ref, vis } = useReveal();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
+    setStatus("sending");
+    try {
+      const res = await fetch("https://formsubmit.co/ajax/fy6355128@gmail.com", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          _subject: `New enquiry from ${form.name || "a website visitor"} — ${BRAND.name}`,
+          _template: "table",
+          Name: form.name,
+          Phone: form.phone,
+          Email: form.email || "Not provided",
+          "Class": form.grade || "Not specified",
+          "Subject(s) Needed": form.subject || "Not specified",
+          Message: form.message || "—",
+        }),
+      });
+      if (!res.ok) throw new Error("Request failed");
+      setStatus("sent");
+    } catch {
+      setStatus("error");
+    }
   };
 
   return (
-    <div className="min-h-screen pt-20" style={{ background: "linear-gradient(170deg, #0A1506 0%, #0D1A07 100%)" }}>
+    <div className="min-h-screen pt-20 page-bg" style={{ background: "linear-gradient(170deg, #0A1506 0%, #0D1A07 100%)" }}>
       <section className="py-14 px-4">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
             <div className="chalk text-4xl md:text-5xl font-bold">Teacher&apos;s Desk</div>
             <ChalkRule />
@@ -1274,7 +1102,7 @@ function ContactPage() {
               {/* Contact info card */}
               <div className={`md:col-span-2 chalk-anim ${vis ? "vis" : ""}`}>
                 <div className="bg-[#FBF8F0] rounded p-6 shadow-xl h-full" style={{ border: "1px solid rgba(100,70,30,0.2)" }}>
-                  <div className="text-gray-800 font-bold text-xl mb-1" style={{ fontFamily: "DM Sans, sans-serif" }}>{BRAND.name}</div>
+                  <div className="text-gray-800 font-bold text-xl mb-1" style={{ fontFamily: "var(--font-body)" }}>{BRAND.name}</div>
                   <div className="w-12 h-0.5 mb-4" style={{ background: "#2C5016" }} />
                   <div className="space-y-4">
                     {[
@@ -1286,14 +1114,14 @@ function ContactPage() {
                       <div key={label} className="flex items-start gap-3">
                         <div style={{ color: "#2C5016", marginTop: 2 }}>{icon}</div>
                         <div>
-                          <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider" style={{ fontFamily: "DM Sans, sans-serif" }}>{label}</div>
+                          <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider" style={{ fontFamily: "var(--font-body)" }}>{label}</div>
                           {href ? (
-                            <div className="text-sm text-gray-700 leading-snug" style={{ fontFamily: "DM Sans, sans-serif" }}>
+                            <div className="text-sm text-gray-700 leading-snug" style={{ fontFamily: "var(--font-body)" }}>
                               <a href={href} className="hover:text-[#2C5016] transition-colors">{val}</a>
                               {val2 && href2 && <> / <a href={href2} className="hover:text-[#2C5016] transition-colors">{val2}</a></>}
                             </div>
                           ) : (
-                            <div className="text-sm text-gray-700 leading-snug" style={{ fontFamily: "DM Sans, sans-serif" }}>{val}</div>
+                            <div className="text-sm text-gray-700 leading-snug" style={{ fontFamily: "var(--font-body)" }}>{val}</div>
                           )}
                         </div>
                       </div>
@@ -1301,9 +1129,9 @@ function ContactPage() {
                   </div>
                   {/* Subjects taught */}
                   <div className="mt-5 pt-4 border-t border-gray-200">
-                    <div className="text-xs text-gray-400 uppercase tracking-wider mb-2" style={{ fontFamily: "DM Sans, sans-serif" }}>Subjects Offered</div>
+                    <div className="text-xs text-gray-400 uppercase tracking-wider mb-2" style={{ fontFamily: "var(--font-body)" }}>Subjects Offered</div>
                     {["Mathematics", "Physics", "Chemistry"].map((s, i) => (
-                      <div key={s} className="flex items-center gap-2 text-sm text-gray-700 mb-1" style={{ fontFamily: "DM Sans, sans-serif" }}>
+                      <div key={s} className="flex items-center gap-2 text-sm text-gray-700 mb-1" style={{ fontFamily: "var(--font-body)" }}>
                         <div className="w-2 h-2 rounded-full" style={{ background: ["#6AAE45", "#4A90D9", "#48A86A"][i] }} /> {s}
                       </div>
                     ))}
@@ -1313,18 +1141,18 @@ function ContactPage() {
 
               {/* Enquiry form on paper */}
               <div className={`md:col-span-3 chalk-anim ${vis ? "vis" : ""}`} style={{ animationDelay: "0.2s" }}>
-                {sent ? (
+                {status === "sent" ? (
                   <div className="bg-[#FBF8F0] rounded p-8 shadow-xl flex flex-col items-center justify-center gap-4 h-full" style={{ border: "1px solid rgba(100,70,30,0.2)", minHeight: 320 }}>
                     <CheckCircle size={48} style={{ color: "#2C5016" }} />
-                    <div className="text-xl font-bold text-gray-800" style={{ fontFamily: "Caveat, cursive" }}>Enquiry Received!</div>
-                    <div className="text-sm text-gray-600 text-center" style={{ fontFamily: "DM Sans, sans-serif" }}>
+                    <div className="text-xl font-bold text-gray-800" style={{ fontFamily: "var(--font-heading)" }}>Enquiry Received!</div>
+                    <div className="text-sm text-gray-600 text-center" style={{ fontFamily: "var(--font-body)" }}>
                       Thank you for your interest. Our team will reach out within 24 hours to schedule a free demo class.
                     </div>
-                    <button onClick={() => setSent(false)} className="mt-2 text-sm underline" style={{ color: "#2C5016", fontFamily: "DM Sans, sans-serif" }}>Submit another enquiry</button>
+                    <button onClick={() => { setStatus("idle"); setForm({ name: "", phone: "", email: "", grade: "", subject: "", message: "" }); }} className="mt-2 text-sm underline" style={{ color: "#2C5016", fontFamily: "var(--font-body)" }}>Submit another enquiry</button>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="bg-[#FBF8F0] rounded p-6 shadow-xl lined-paper" style={{ border: "1px solid rgba(100,70,30,0.2)" }}>
-                    <div className="text-gray-800 font-bold text-lg mb-4" style={{ fontFamily: "Caveat, cursive" }}>Student Enquiry Form</div>
+                    <div className="text-gray-800 font-bold text-lg mb-4" style={{ fontFamily: "var(--font-heading)" }}>Student Enquiry Form</div>
                     <div className="grid grid-cols-2 gap-4">
                       {[
                         { name: "name", placeholder: "Student Name", type: "text", span: 2 },
@@ -1335,29 +1163,34 @@ function ContactPage() {
                           onChange={e => setForm({ ...form, [name]: e.target.value })}
                           required={name !== "email"}
                           className="px-3 py-2.5 rounded text-sm text-gray-800 border focus:outline-none transition-all"
-                          style={{ borderColor: "rgba(44,80,22,0.25)", fontFamily: "DM Sans, sans-serif", background: "rgba(255,255,255,0.7)", gridColumn: `span ${span}` }} />
+                          style={{ borderColor: "rgba(44,80,22,0.25)", fontFamily: "var(--font-body)", background: "rgba(255,255,255,0.7)", gridColumn: `span ${span}` }} />
                       ))}
                       <select value={form.grade} onChange={e => setForm({ ...form, grade: e.target.value })} required
                         className="col-span-1 px-3 py-2.5 rounded text-sm text-gray-700 border focus:outline-none"
-                        style={{ borderColor: "rgba(44,80,22,0.25)", fontFamily: "DM Sans, sans-serif", background: "rgba(255,255,255,0.7)" }}>
+                        style={{ borderColor: "rgba(44,80,22,0.25)", fontFamily: "var(--font-body)", background: "rgba(255,255,255,0.7)" }}>
                         <option value="">Select Class</option>
-                        {["IX", "X", "XI", "XII", "B.E / B.Tech"].map(g => <option key={g} value={g}>{g === "B.E / B.Tech" ? g : `Class ${g}`}</option>)}
+                        {["IX", "X", "XI", "XII"].map(g => <option key={g} value={g}>{`Class ${g}`}</option>)}
                       </select>
                       <select value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })}
                         className="col-span-1 px-3 py-2.5 rounded text-sm text-gray-700 border focus:outline-none"
-                        style={{ borderColor: "rgba(44,80,22,0.25)", fontFamily: "DM Sans, sans-serif", background: "rgba(255,255,255,0.7)" }}>
+                        style={{ borderColor: "rgba(44,80,22,0.25)", fontFamily: "var(--font-body)", background: "rgba(255,255,255,0.7)" }}>
                         <option value="">Subject(s) Needed</option>
                         {["Mathematics", "Science (Physics, Chemistry & Biology)", "Physics", "Chemistry", "All Three"].map(s => <option key={s}>{s}</option>)}
                       </select>
                       <textarea value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="Any specific requirements or questions..." rows={3}
                         className="col-span-2 px-3 py-2.5 rounded text-sm text-gray-800 border focus:outline-none resize-none"
-                        style={{ borderColor: "rgba(44,80,22,0.25)", fontFamily: "DM Sans, sans-serif", background: "rgba(255,255,255,0.7)", gridColumn: "span 2" }} />
+                        style={{ borderColor: "rgba(44,80,22,0.25)", fontFamily: "var(--font-body)", background: "rgba(255,255,255,0.7)", gridColumn: "span 2" }} />
                     </div>
-                    <button type="submit" className="mt-4 w-full py-3 rounded font-bold text-sm flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-100"
-                      style={{ background: "#2C5016", color: "#F5F0E8", fontFamily: "DM Sans, sans-serif", boxShadow: "0 4px 16px rgba(44,80,22,0.4)" }}>
-                      <Send size={16} /> Send Enquiry
+                    {status === "error" && (
+                      <div className="mt-3 px-3 py-2 rounded text-sm" style={{ background: "rgba(212,24,61,0.08)", color: "#B0102E", fontFamily: "var(--font-body)", border: "1px solid rgba(212,24,61,0.25)" }}>
+                        Something went wrong sending your enquiry. Please try again, or call us directly at {BRAND.phone1}.
+                      </div>
+                    )}
+                    <button type="submit" disabled={status === "sending"} className="mt-4 w-full py-3 rounded font-bold text-sm flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-100 disabled:opacity-60 disabled:hover:scale-100"
+                      style={{ background: "#2C5016", color: "#F5F0E8", fontFamily: "var(--font-body)", boxShadow: "0 4px 16px rgba(44,80,22,0.4)" }}>
+                      {status === "sending" ? "Sending…" : <>Send Enquiry <Send size={16} /></>}
                     </button>
-                    <p className="text-xs text-gray-400 mt-2 text-center" style={{ fontFamily: "DM Sans, sans-serif" }}>
+                    <p className="text-xs text-gray-400 mt-2 text-center" style={{ fontFamily: "var(--font-body)" }}>
                       We typically respond within 24 hours during working days.
                     </p>
                   </form>
@@ -1377,15 +1210,15 @@ function ContactPage() {
 function Footer({ setPage }: { setPage: (p: Page) => void }) {
   return (
     <footer style={{ background: "#080F04", borderTop: "1px solid rgba(245,240,228,0.08)" }}>
-      <div className="max-w-6xl mx-auto px-5 py-10 grid md:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-5 py-10 grid md:grid-cols-4 gap-8">
         <div>
           <div className="chalk text-xl font-bold mb-1">{BRAND.name}</div>
           <div className="chalk text-sm opacity-50 mb-3">{BRAND.location}</div>
-          <div className="text-xs opacity-50 leading-relaxed" style={{ fontFamily: "DM Sans, sans-serif" }}>CBSE coaching from Class 9 through B.E/B.Tech in Mathematics, Physics &amp; Chemistry. Home tuition and online classes available.</div>
+          <div className="text-xs opacity-50 leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>CBSE coaching from Class 9 through Class 12 in Mathematics, Physics &amp; Chemistry. Home tuition and online classes available.</div>
         </div>
         {[
           { heading: "Pages", items: NAV_ITEMS.map(({ label, page: p }) => ({ label, page: p, href: undefined as string | undefined })) },
-          { heading: "Subjects", items: [{ label: "Mathematics", page: "courses" as Page, href: undefined as string | undefined }, { label: "Physics", page: "courses" as Page, href: undefined }, { label: "Chemistry", page: "courses" as Page, href: undefined }] },
+          { heading: "Subjects", items: [{ label: "Mathematics", page: "about" as Page, href: undefined as string | undefined }, { label: "Physics", page: "about" as Page, href: undefined }, { label: "Chemistry", page: "about" as Page, href: undefined }] },
           { heading: "Contact", items: [{ label: BRAND.phone1, page: "contact" as Page, href: `tel:${BRAND.phone1Href}` }, { label: BRAND.phone2, page: "contact" as Page, href: `tel:${BRAND.phone2Href}` }, { label: BRAND.email, page: "contact" as Page, href: `mailto:${BRAND.email}` }] },
         ].map(({ heading, items }) => (
           <div key={heading}>
@@ -1394,7 +1227,7 @@ function Footer({ setPage }: { setPage: (p: Page) => void }) {
               {items.map(({ label, page: p, href }) => (
                 <li key={label}>
                   {href ? (
-                    <a href={href} className="text-sm opacity-60 hover:opacity-90 transition-opacity text-left" style={{ fontFamily: "DM Sans, sans-serif" }}>{label}</a>
+                    <a href={href} className="text-sm opacity-60 hover:opacity-90 transition-opacity text-left" style={{ fontFamily: "var(--font-body)" }}>{label}</a>
                   ) : (
                     <button onClick={() => setPage(p)} className="chalk text-sm opacity-60 hover:opacity-90 transition-opacity text-left">{label}</button>
                   )}
@@ -1405,7 +1238,7 @@ function Footer({ setPage }: { setPage: (p: Page) => void }) {
         ))}
       </div>
       <div className="text-center py-4" style={{ borderTop: "1px solid rgba(245,240,228,0.05)" }}>
-        <div className="text-xs opacity-35" style={{ fontFamily: "DM Sans, sans-serif" }}>© 2025 {BRAND.name} · All rights reserved · CBSE Coaching, {BRAND.location}</div>
+        <div className="text-xs opacity-35" style={{ fontFamily: "var(--font-body)" }}>© 2025 {BRAND.name} · All rights reserved · CBSE Coaching, {BRAND.location}</div>
       </div>
     </footer>
   );
@@ -1417,10 +1250,14 @@ function Footer({ setPage }: { setPage: (p: Page) => void }) {
 function LightModeStyles() {
   return (
     <style>{`
-      :root:not(.dark) .board-bg { background: linear-gradient(155deg, #1B3C0C 0%, #1E4110 40%, #193C0A 75%, #152E08 100%) !important; }
-      :root:not(.dark) section { background: none !important; }
-      :root:not(.dark) body { background: #F5F0E8; }
-      :root:not(.dark) .chalk { color: rgba(245,240,228,0.93); }
+      /* Light mode keeps the chalkboard-green identity but lifts every page
+         and section background to a brighter, daytime shade of the same
+         green — consistent across every page. Boards, the footer, and paper
+         cards intentionally stay dark/light as designed, since a chalkboard
+         and a sheet of paper don't change color with the room lights. */
+      :root:not(.dark) .page-bg {
+        background: linear-gradient(170deg, #3C7024 0%, #468226 50%, #3C7024 100%) !important;
+      }
     `}</style>
   );
 }
@@ -1445,7 +1282,6 @@ export default function App() {
   const pages: Record<Page, React.ReactNode> = {
     home: <HomePage setPage={handleSetPage} />,
     about: <AboutPage setPage={handleSetPage} />,
-    courses: <CoursesPage setPage={handleSetPage} />,
     gallery: <GalleryPage />,
     blog: <BlogPage />,
     contact: <ContactPage />,
