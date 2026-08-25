@@ -364,7 +364,7 @@ function Navbar({ page, setPage, dark, setDark }: { page: Page; setPage: (p: Pag
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "py-2 shadow-xl" : "py-3"}`}
       style={{ background: scrolled ? (dark ? "rgba(13,26,7,0.95)" : "rgba(44,80,22,0.97)") : "rgba(0,0,0,0)", backdropFilter: scrolled ? "blur(12px)" : "none" }}>
-      <div className="max-w-7xl mx-auto px-5 flex items-center justify-between gap-4">
+      <div className="max-w-[1440px] mx-auto px-5 flex items-center justify-between gap-4">
         {/* Logo */}
         <button onClick={() => { setPage("home"); setOpen(false); }} className="flex items-center gap-2.5 group">
           <div className="w-9 h-9 rounded flex items-center justify-center text-white font-bold text-sm shrink-0" style={{ background: "linear-gradient(135deg, #2C5016, #5A9040)", boxShadow: "0 2px 12px rgba(90,144,64,0.4)", fontFamily: "var(--font-body)" }}>SC</div>
@@ -380,7 +380,7 @@ function Navbar({ page, setPage, dark, setDark }: { page: Page; setPage: (p: Pag
             <button key={p} onClick={() => setPage(p)}
               className="px-3 py-1.5 rounded transition-all duration-200"
               style={{
-                fontFamily: "var(--font-heading)", fontSize: "1.1rem", fontWeight: 600, letterSpacing: "0.03em",
+                fontFamily: "var(--font-heading)", fontSize: "1.2rem", fontWeight: 600, letterSpacing: "0.03em",
                 color: page === p ? "rgba(255,230,120,0.95)" : "rgba(245,240,228,0.75)",
                 textShadow: page === p ? "0 0 12px rgba(255,230,120,0.4)" : "none",
                 background: page === p ? "rgba(255,255,255,0.07)" : "transparent",
@@ -412,7 +412,7 @@ function Navbar({ page, setPage, dark, setDark }: { page: Page; setPage: (p: Pag
             style={{ background: dark ? "rgba(13,26,7,0.97)" : "rgba(44,80,22,0.97)", backdropFilter: "blur(12px)" }}>
             {NAV_ITEMS.map(({ label, page: p }) => (
               <button key={p} onClick={() => { setPage(p); setOpen(false); }} className="text-left px-3 py-2 rounded"
-                style={{ fontFamily: "var(--font-heading)", fontSize: "1.2rem", fontWeight: 600, color: page === p ? "rgba(255,230,120,0.95)" : "rgba(245,240,228,0.8)" }}>
+                style={{ fontFamily: "var(--font-heading)", fontSize: "1.3rem", fontWeight: 600, color: page === p ? "rgba(255,230,120,0.95)" : "rgba(245,240,228,0.8)" }}>
                 {label}
               </button>
             ))}
@@ -434,9 +434,9 @@ function HeroSection({ setPage }: { setPage: (p: Page) => void }) {
   useEffect(() => { const t = setTimeout(() => setReady(true), 200); return () => clearTimeout(t); }, []);
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center px-4 pt-20 pb-8 page-bg"
+    <section className="min-h-screen flex flex-col items-center justify-center px-3 pt-20 pb-8 page-bg"
       style={{ background: "linear-gradient(170deg, #0A1506 0%, #0F1E08 60%, #0D1A07 100%)" }}>
-      <div className="w-full max-w-7xl">
+      <div className="w-full max-w-[1440px]">
         <Board className="w-full">
           <div className="px-6 py-10 md:px-12 md:py-14 min-h-[60vh] flex flex-col justify-between">
             {/* Top corner annotations */}
@@ -520,8 +520,8 @@ function SubjectsSection() {
   ];
 
   return (
-    <section className="py-16 px-4 page-bg" style={{ background: "linear-gradient(180deg, #0F1E08 0%, #0D1A07 100%)" }}>
-      <div className="max-w-7xl mx-auto">
+    <section className="py-16 px-3 page-bg" style={{ background: "linear-gradient(180deg, #0F1E08 0%, #0D1A07 100%)" }}>
+      <div className="max-w-[1440px] mx-auto">
         <div className="text-center mb-10">
           <div className="chalk text-4xl md:text-5xl font-bold">What We Teach</div>
           <ChalkRule />
@@ -569,8 +569,8 @@ function WhyUsSection({ setPage }: { setPage: (p: Page) => void }) {
 
   return (
     <DusterSection>
-      <section className="py-16 px-4 page-bg" style={{ background: "linear-gradient(180deg, #0D1A07 0%, #0F1E08 100%)" }}>
-        <div className="max-w-7xl mx-auto">
+      <section className="py-16 px-3 page-bg" style={{ background: "linear-gradient(180deg, #0D1A07 0%, #0F1E08 100%)" }}>
+        <div className="max-w-[1440px] mx-auto">
           <Board>
             <div ref={ref} className="px-8 py-10 md:px-14 md:py-12">
               <div className="mb-8 text-center">
@@ -614,8 +614,8 @@ function TeachersPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
   const { ref, vis } = useReveal();
   return (
     <DusterSection>
-      <section className="py-16 px-4 page-bg" style={{ background: "linear-gradient(180deg, #0D1A07 0%, #0F1E08 100%)" }}>
-        <div className="max-w-7xl mx-auto">
+      <section className="py-16 px-3 page-bg" style={{ background: "linear-gradient(180deg, #0D1A07 0%, #0F1E08 100%)" }}>
+        <div className="max-w-[1440px] mx-auto">
           <div className="text-center mb-10">
             <div className="chalk text-4xl md:text-5xl font-bold">Meet the Faculty</div>
             <ChalkRule />
@@ -673,8 +673,8 @@ function GalleryPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
   const { ref, vis } = useReveal();
   return (
     <DusterSection>
-      <section className="py-16 px-4 page-bg" style={{ background: "linear-gradient(180deg, #0F1E08 0%, #0D1A07 100%)" }}>
-        <div className="max-w-7xl mx-auto">
+      <section className="py-16 px-3 page-bg" style={{ background: "linear-gradient(180deg, #0F1E08 0%, #0D1A07 100%)" }}>
+        <div className="max-w-[1440px] mx-auto">
           <div className="text-center mb-10">
             <div className="chalk text-4xl md:text-5xl font-bold">Classroom Memories</div>
             <ChalkRule />
@@ -708,8 +708,8 @@ function BlogPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
   const { ref, vis } = useReveal();
   return (
     <DusterSection>
-      <section className="py-16 px-4 page-bg" style={{ background: "linear-gradient(180deg, #0D1A07 0%, #0F1E08 100%)" }}>
-        <div className="max-w-7xl mx-auto">
+      <section className="py-16 px-3 page-bg" style={{ background: "linear-gradient(180deg, #0D1A07 0%, #0F1E08 100%)" }}>
+        <div className="max-w-[1440px] mx-auto">
           <div className="text-center mb-10">
             <div className="chalk text-4xl md:text-5xl font-bold">Class Notes &amp; Blog</div>
             <ChalkRule />
@@ -726,7 +726,7 @@ function BlogPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
                       <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ background: subjectColor + "20", color: subjectColor, fontFamily: "var(--font-body)" }}>{subject}</span>
                       <span className="text-xs text-gray-400" style={{ fontFamily: "var(--font-heading)" }}>pg. {pg}</span>
                     </div>
-                    <h3 className="text-base font-bold leading-snug text-gray-800 mb-2" style={{ fontFamily: "var(--font-heading)", fontSize: "1.1rem" }}>{title}</h3>
+                    <h3 className="text-base font-bold leading-snug text-gray-800 mb-2" style={{ fontFamily: "var(--font-heading)", fontSize: "1.2rem" }}>{title}</h3>
                     <p className="text-sm text-gray-600 leading-relaxed mb-4" style={{ fontFamily: "var(--font-body)" }}>{excerpt}</p>
                     <div className="flex items-center justify-between text-xs text-gray-400 border-t border-gray-200 pt-3 mt-auto" style={{ fontFamily: "var(--font-body)" }}>
                       <span>{date}</span>
@@ -753,8 +753,8 @@ function CTASection({ setPage }: { setPage: (p: Page) => void }) {
   const { ref, vis } = useReveal();
   return (
     <DusterSection>
-      <section className="py-16 px-4 page-bg" style={{ background: "linear-gradient(180deg, #0F1E08 0%, #0A1506 100%)" }}>
-        <div className="max-w-5xl mx-auto" ref={ref}>
+      <section className="py-16 px-3 page-bg" style={{ background: "linear-gradient(180deg, #0F1E08 0%, #0A1506 100%)" }}>
+        <div className="max-w-[1120px] mx-auto" ref={ref}>
           <Board>
             <div className="px-8 py-12 md:px-16 md:py-16 text-center">
               <div className={`chalk-anim ${vis ? "vis" : ""} space-y-4`}>
@@ -816,8 +816,8 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
   return (
     <div className="min-h-screen pt-20 page-bg" style={{ background: "linear-gradient(170deg, #0A1506 0%, #0D1A07 100%)" }}>
       {/* Cork board section */}
-      <section className="py-14 px-4">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-14 px-3">
+        <div className="max-w-[1440px] mx-auto">
           <div className="text-center mb-10">
             <div className="chalk text-4xl md:text-5xl font-bold">Our Faculty</div>
             <ChalkRule />
@@ -851,7 +851,7 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
                       </div>
                       {/* Info */}
                       <div className="p-3 border-t border-gray-200">
-                        <div className="text-sm font-bold text-gray-800" style={{ fontFamily: "var(--font-heading)", fontSize: "1rem" }}>{name}</div>
+                        <div className="text-sm font-bold text-gray-800" style={{ fontFamily: "var(--font-heading)", fontSize: "1.1rem" }}>{name}</div>
                         <div className="text-xs font-semibold mt-0.5" style={{ color: pin, fontFamily: "var(--font-body)" }}>{subject}</div>
                         <div className="text-xs text-gray-500 mt-0.5" style={{ fontFamily: "var(--font-body)" }}>Classes {classes}</div>
                         {selected === id && (
@@ -872,8 +872,8 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
 
       {/* School story on the board */}
       <DusterSection>
-        <section className="py-14 px-4">
-          <div className="max-w-6xl mx-auto">
+        <section className="py-14 px-3">
+          <div className="max-w-[1280px] mx-auto">
             <Board>
               <div className="px-8 py-12 md:px-14 md:py-14">
                 <div className="chalk text-4xl md:text-5xl font-bold mb-4">Our Story</div>
@@ -940,8 +940,8 @@ function GalleryPage() {
 
   return (
     <div className="min-h-screen pt-20 page-bg" style={{ background: "linear-gradient(170deg, #0A1506 0%, #0D1A07 100%)" }}>
-      <section className="py-14 px-4">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-14 px-3">
+        <div className="max-w-[1440px] mx-auto">
           <div className="text-center mb-10">
             <div className="chalk text-4xl md:text-5xl font-bold">Memory Wall</div>
             <ChalkRule />
@@ -994,8 +994,8 @@ function BlogPage() {
 
   return (
     <div className="min-h-screen pt-20 page-bg" style={{ background: "linear-gradient(170deg, #0A1506 0%, #0D1A07 100%)" }}>
-      <section className="py-14 px-4">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-14 px-3">
+        <div className="max-w-[1280px] mx-auto">
           <div className="text-center mb-10">
             <div className="chalk text-4xl md:text-5xl font-bold">Class Notes &amp; Blog</div>
             <ChalkRule />
@@ -1022,7 +1022,7 @@ function BlogPage() {
                       <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ background: subjectColor + "18", color: subjectColor, fontFamily: "var(--font-body)" }}>{subject}</span>
                       <span className="text-xs text-gray-400" style={{ fontFamily: "var(--font-body)" }}>{date} · {readTime}</span>
                     </div>
-                    <h2 className="text-lg md:text-xl font-bold text-gray-800 leading-snug mb-2 group-hover:text-gray-900" style={{ fontFamily: "var(--font-heading)", fontSize: "1.25rem" }}>{title}</h2>
+                    <h2 className="text-lg md:text-xl font-bold text-gray-800 leading-snug mb-2 group-hover:text-gray-900" style={{ fontFamily: "var(--font-heading)", fontSize: "1.35rem" }}>{title}</h2>
                     <p className="text-sm text-gray-600 leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{excerpt}</p>
                     <div className="mt-3 flex items-center gap-1 text-sm font-semibold" style={{ color: subjectColor, fontFamily: "var(--font-body)" }}>
                       Read full note <ChevronRight size={14} />
@@ -1073,8 +1073,8 @@ function ContactPage() {
 
   return (
     <div className="min-h-screen pt-20 page-bg" style={{ background: "linear-gradient(170deg, #0A1506 0%, #0D1A07 100%)" }}>
-      <section className="py-14 px-4">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-14 px-3">
+        <div className="max-w-[1280px] mx-auto">
           <div className="text-center mb-10">
             <div className="chalk text-4xl md:text-5xl font-bold">Teacher&apos;s Desk</div>
             <ChalkRule />
@@ -1210,7 +1210,7 @@ function ContactPage() {
 function Footer({ setPage }: { setPage: (p: Page) => void }) {
   return (
     <footer style={{ background: "#080F04", borderTop: "1px solid rgba(245,240,228,0.08)" }}>
-      <div className="max-w-7xl mx-auto px-5 py-10 grid md:grid-cols-4 gap-8">
+      <div className="max-w-[1440px] mx-auto px-5 py-10 grid md:grid-cols-4 gap-8">
         <div>
           <div className="chalk text-xl font-bold mb-1">{BRAND.name}</div>
           <div className="chalk text-sm opacity-50 mb-3">{BRAND.location}</div>
