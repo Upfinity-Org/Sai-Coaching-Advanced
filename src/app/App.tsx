@@ -434,7 +434,7 @@ function HeroSection({ setPage }: { setPage: (p: Page) => void }) {
   useEffect(() => { const t = setTimeout(() => setReady(true), 200); return () => clearTimeout(t); }, []);
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center px-3 pt-20 pb-8 page-bg"
+    <section className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 pt-20 pb-8 page-bg"
       style={{ background: "linear-gradient(170deg, #0A1506 0%, #0F1E08 60%, #0D1A07 100%)" }}>
       <div className="w-full max-w-[1440px]">
         <Board className="w-full">
@@ -520,7 +520,7 @@ function SubjectsSection() {
   ];
 
   return (
-    <section className="py-16 px-3 page-bg" style={{ background: "linear-gradient(180deg, #0F1E08 0%, #0D1A07 100%)" }}>
+    <section className="py-16 px-4 sm:px-6 page-bg" style={{ background: "linear-gradient(180deg, #0F1E08 0%, #0D1A07 100%)" }}>
       <div className="max-w-[1440px] mx-auto">
         <div className="text-center mb-10">
           <div className="chalk text-4xl md:text-5xl font-bold">What We Teach</div>
@@ -569,7 +569,7 @@ function WhyUsSection({ setPage }: { setPage: (p: Page) => void }) {
 
   return (
     <DusterSection>
-      <section className="py-16 px-3 page-bg" style={{ background: "linear-gradient(180deg, #0D1A07 0%, #0F1E08 100%)" }}>
+      <section className="py-16 px-4 sm:px-6 page-bg" style={{ background: "linear-gradient(180deg, #0D1A07 0%, #0F1E08 100%)" }}>
         <div className="max-w-[1440px] mx-auto">
           <Board>
             <div ref={ref} className="px-8 py-10 md:px-14 md:py-12">
@@ -614,7 +614,7 @@ function TeachersPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
   const { ref, vis } = useReveal();
   return (
     <DusterSection>
-      <section className="py-16 px-3 page-bg" style={{ background: "linear-gradient(180deg, #0D1A07 0%, #0F1E08 100%)" }}>
+      <section className="py-16 px-4 sm:px-6 page-bg" style={{ background: "linear-gradient(180deg, #0D1A07 0%, #0F1E08 100%)" }}>
         <div className="max-w-[1440px] mx-auto">
           <div className="text-center mb-10">
             <div className="chalk text-4xl md:text-5xl font-bold">Meet the Faculty</div>
@@ -673,7 +673,7 @@ function GalleryPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
   const { ref, vis } = useReveal();
   return (
     <DusterSection>
-      <section className="py-16 px-3 page-bg" style={{ background: "linear-gradient(180deg, #0F1E08 0%, #0D1A07 100%)" }}>
+      <section className="py-16 px-4 sm:px-6 page-bg" style={{ background: "linear-gradient(180deg, #0F1E08 0%, #0D1A07 100%)" }}>
         <div className="max-w-[1440px] mx-auto">
           <div className="text-center mb-10">
             <div className="chalk text-4xl md:text-5xl font-bold">Classroom Memories</div>
@@ -708,7 +708,7 @@ function BlogPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
   const { ref, vis } = useReveal();
   return (
     <DusterSection>
-      <section className="py-16 px-3 page-bg" style={{ background: "linear-gradient(180deg, #0D1A07 0%, #0F1E08 100%)" }}>
+      <section className="py-16 px-4 sm:px-6 page-bg" style={{ background: "linear-gradient(180deg, #0D1A07 0%, #0F1E08 100%)" }}>
         <div className="max-w-[1440px] mx-auto">
           <div className="text-center mb-10">
             <div className="chalk text-4xl md:text-5xl font-bold">Class Notes &amp; Blog</div>
@@ -753,7 +753,7 @@ function CTASection({ setPage }: { setPage: (p: Page) => void }) {
   const { ref, vis } = useReveal();
   return (
     <DusterSection>
-      <section className="py-16 px-3 page-bg" style={{ background: "linear-gradient(180deg, #0F1E08 0%, #0A1506 100%)" }}>
+      <section className="py-16 px-4 sm:px-6 page-bg" style={{ background: "linear-gradient(180deg, #0F1E08 0%, #0A1506 100%)" }}>
         <div className="max-w-[1120px] mx-auto" ref={ref}>
           <Board>
             <div className="px-8 py-12 md:px-16 md:py-16 text-center">
@@ -816,7 +816,7 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
   return (
     <div className="min-h-screen pt-20 page-bg" style={{ background: "linear-gradient(170deg, #0A1506 0%, #0D1A07 100%)" }}>
       {/* Cork board section */}
-      <section className="py-14 px-3">
+      <section className="py-14 px-4 sm:px-6">
         <div className="max-w-[1440px] mx-auto">
           <div className="text-center mb-10">
             <div className="chalk text-4xl md:text-5xl font-bold">Our Faculty</div>
@@ -872,7 +872,7 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
 
       {/* School story on the board */}
       <DusterSection>
-        <section className="py-14 px-3">
+        <section className="py-14 px-4 sm:px-6">
           <div className="max-w-[1280px] mx-auto">
             <Board>
               <div className="px-8 py-12 md:px-14 md:py-14">
@@ -940,7 +940,7 @@ function GalleryPage() {
 
   return (
     <div className="min-h-screen pt-20 page-bg" style={{ background: "linear-gradient(170deg, #0A1506 0%, #0D1A07 100%)" }}>
-      <section className="py-14 px-3">
+      <section className="py-14 px-4 sm:px-6">
         <div className="max-w-[1440px] mx-auto">
           <div className="text-center mb-10">
             <div className="chalk text-4xl md:text-5xl font-bold">Memory Wall</div>
@@ -994,7 +994,7 @@ function BlogPage() {
 
   return (
     <div className="min-h-screen pt-20 page-bg" style={{ background: "linear-gradient(170deg, #0A1506 0%, #0D1A07 100%)" }}>
-      <section className="py-14 px-3">
+      <section className="py-14 px-4 sm:px-6">
         <div className="max-w-[1280px] mx-auto">
           <div className="text-center mb-10">
             <div className="chalk text-4xl md:text-5xl font-bold">Class Notes &amp; Blog</div>
@@ -1073,7 +1073,7 @@ function ContactPage() {
 
   return (
     <div className="min-h-screen pt-20 page-bg" style={{ background: "linear-gradient(170deg, #0A1506 0%, #0D1A07 100%)" }}>
-      <section className="py-14 px-3">
+      <section className="py-14 px-4 sm:px-6">
         <div className="max-w-[1280px] mx-auto">
           <div className="text-center mb-10">
             <div className="chalk text-4xl md:text-5xl font-bold">Teacher&apos;s Desk</div>
