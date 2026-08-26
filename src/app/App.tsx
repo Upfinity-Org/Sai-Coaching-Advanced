@@ -25,6 +25,8 @@ const BRAND = {
   phone1Href: "+919171119078",
   phone2Href: "+918678978053",
   email: "info@saicoachingcenter.in", // TODO: placeholder — replace with the real business email
+  mapsUrl: "https://maps.app.goo.gl/bko1f4bbHuaCosL6A",
+  mapEmbedSrc: "https://www.google.com/maps?q=12.9506548,80.2353005&z=16&output=embed",
 };
 
 const TEACHERS = [
@@ -1237,6 +1239,32 @@ function Footer({ setPage }: { setPage: (p: Page) => void }) {
           </div>
         ))}
       </div>
+
+      <div className="max-w-[1440px] mx-auto px-5 pb-10">
+        <div className="chalk text-sm font-bold opacity-60 uppercase tracking-widest mb-3">Find Us</div>
+        <div className="rounded overflow-hidden" style={{ border: "1.5px solid rgba(245,240,228,0.15)" }}>
+          <iframe
+            title={`${BRAND.name} — location map`}
+            src={BRAND.mapEmbedSrc}
+            width="100%"
+            height="280"
+            style={{ border: 0, display: "block", filter: "grayscale(0.15) contrast(1.05)" }}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+          />
+        </div>
+        <a
+          href={BRAND.mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 inline-flex items-center gap-2 text-sm opacity-70 hover:opacity-95 transition-opacity"
+          style={{ fontFamily: "var(--font-body)" }}
+        >
+          <MapPin size={15} /> Get Directions on Google Maps
+        </a>
+      </div>
+
       <div className="text-center py-4" style={{ borderTop: "1px solid rgba(245,240,228,0.05)" }}>
         <div className="text-xs opacity-35" style={{ fontFamily: "var(--font-body)" }}>© 2025 {BRAND.name} · All rights reserved · CBSE Coaching, {BRAND.location}</div>
       </div>
