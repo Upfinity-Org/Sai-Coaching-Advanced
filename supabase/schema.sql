@@ -31,19 +31,26 @@ create table if not exists gallery (
 alter table faculty enable row level security;
 alter table gallery enable row level security;
 
+drop policy if exists "Public can read faculty" on faculty;
 create policy "Public can read faculty" on faculty
   for select using (true);
 
+drop policy if exists "Public can read gallery" on gallery;
 create policy "Public can read gallery" on gallery
   for select using (true);
 
+-- Uses "to authenticated" (a Postgres role check) rather than checking the
+-- JWT's role claim directly — this is the pattern Supabase recommends and
+-- is the most reliable one for both table rows and storage objects.
+drop policy if exists "Authenticated can write faculty" on faculty;
 create policy "Authenticated can write faculty" on faculty
-  for all using (auth.role() = 'authenticated')
-  with check (auth.role() = 'authenticated');
+  for all to authenticated
+  using (true) with check (true);
 
+drop policy if exists "Authenticated can write gallery" on gallery;
 create policy "Authenticated can write gallery" on gallery
-  for all using (auth.role() = 'authenticated')
-  with check (auth.role() = 'authenticated');
+  for all to authenticated
+  using (true) with check (true);
 
 -- 4. STORAGE BUCKET
 -- Create the bucket itself in the Dashboard first (Storage -> New bucket):
@@ -51,17 +58,22 @@ create policy "Authenticated can write gallery" on gallery
 --   public: ON  (so uploaded photos load on the public site)
 -- Then run the policies below in the SQL Editor.
 
+drop policy if exists "Public can view site-images" on storage.objects;
 create policy "Public can view site-images"
   on storage.objects for select
   using (bucket_id = 'site-images');
 
+drop policy if exists "Authenticated can upload site-images" on storage.objects;
 create policy "Authenticated can upload site-images"
   on storage.objects for insert
-  with check (bucket_id = 'site-images' and auth.role() = 'authenticated');
+  to authenticated
+  with check (bucket_id = 'site-images');
 
+drop policy if exists "Authenticated can delete site-images" on storage.objects;
 create policy "Authenticated can delete site-images"
   on storage.objects for delete
-  using (bucket_id = 'site-images' and auth.role() = 'authenticated');
+  to authenticated
+  using (bucket_id = 'site-images');
 
 -- ============================================================
 -- OPTIONAL: seed the tables with the same placeholder content

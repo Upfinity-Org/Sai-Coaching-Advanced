@@ -447,8 +447,16 @@ function Navbar({ page, setPage, dark, setDark }: { page: Page; setPage: (p: Pag
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", fn);
+    let ticking = false;
+    const fn = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 40);
+        ticking = false;
+      });
+    };
+    window.addEventListener("scroll", fn, { passive: true });
     return () => window.removeEventListener("scroll", fn);
   }, []);
 

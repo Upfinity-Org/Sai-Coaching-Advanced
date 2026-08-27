@@ -109,6 +109,31 @@ export async function addFaculty(rec: {
   return data as FacultyRow;
 }
 
+export async function updateFaculty(
+  id: string,
+  patch: Partial<{
+    name: string;
+    subject: string;
+    classes: string;
+    bio: string;
+    pin_color: string;
+    image_url: string | null;
+  }>
+): Promise<FacultyRow | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase
+    .from("faculty")
+    .update(patch)
+    .eq("id", id)
+    .select()
+    .single();
+  if (error) {
+    console.error("updateFaculty:", error.message);
+    return null;
+  }
+  return data as FacultyRow;
+}
+
 export async function deleteFaculty(row: FacultyRow): Promise<boolean> {
   if (!supabase) return false;
   const { error } = await supabase.from("faculty").delete().eq("id", row.id);
@@ -133,6 +158,24 @@ export async function addGalleryImage(rec: {
     .single();
   if (error) {
     console.error("addGalleryImage:", error.message);
+    return null;
+  }
+  return data as GalleryRow;
+}
+
+export async function updateGalleryCaption(
+  id: string,
+  caption: string
+): Promise<GalleryRow | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase
+    .from("gallery")
+    .update({ caption })
+    .eq("id", id)
+    .select()
+    .single();
+  if (error) {
+    console.error("updateGalleryCaption:", error.message);
     return null;
   }
   return data as GalleryRow;
