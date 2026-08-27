@@ -7,6 +7,10 @@ import {
   GraduationCap, ChevronDown, Star, ChevronRight,
   CheckCircle, Zap
 } from "lucide-react";
+import { ADMIN_PATH } from "../admin/config";
+import AdminApp from "../admin/AdminApp";
+import { supabaseEnabled } from "../lib/supabaseClient";
+import { fetchFaculty, fetchGallery, FacultyRow, GalleryRow } from "../lib/content";
 
 /* =========================================================
    TYPES & DATA
@@ -29,12 +33,104 @@ const BRAND = {
   mapEmbedSrc: "https://www.google.com/maps?q=12.9506548,80.2353005&z=16&output=embed",
 };
 
-const TEACHERS = [
-  { id: 1, name: "Mathematics Faculty", subject: "Mathematics", classes: "IX–XII", pin: "#E05252", rotation: -2.5, bio: "Expert in Algebra, Calculus & Coordinate Geometry" },
-  { id: 2, name: "Physics Faculty", subject: "Physics", classes: "XI–XII", pin: "#4A90D9", rotation: 1.5, bio: "Specialist in Mechanics, Optics & Modern Physics" },
-  { id: 3, name: "Chemistry Faculty", subject: "Chemistry", classes: "XI–XII", pin: "#48A86A", rotation: -1, bio: "Expert in Organic, Inorganic & Physical Chemistry" },
-  { id: 4, name: "Science Faculty", subject: "Science", classes: "IX–X", pin: "#D4A017", rotation: 2.5, bio: "Strong foundation building for CBSE 9th & 10th Science" },
+/* ---- Faculty & Gallery ----
+   These are shown when Supabase isn't configured (local preview) or as the
+   very first thing the visitor sees while the live data is loading. Once
+   Supabase is set up, the admin dashboard is the actual source of truth —
+   see src/admin. */
+type TeacherView = {
+  id: string;
+  name: string;
+  subject: string;
+  classes: string;
+  bio: string;
+  pin: string;
+  imageUrl: string | null;
+};
+
+type GalleryView = {
+  id: string;
+  caption: string;
+  imageUrl: string;
+};
+
+const FALLBACK_TEACHERS: TeacherView[] = [
+  { id: "t1", name: "Mathematics Faculty", subject: "Mathematics", classes: "IX–XII", pin: "#E05252", bio: "Expert in Algebra, Calculus & Coordinate Geometry", imageUrl: null },
+  { id: "t2", name: "Physics Faculty", subject: "Physics", classes: "XI–XII", pin: "#4A90D9", bio: "Specialist in Mechanics, Optics & Modern Physics", imageUrl: null },
+  { id: "t3", name: "Chemistry Faculty", subject: "Chemistry", classes: "XI–XII", pin: "#48A86A", bio: "Expert in Organic, Inorganic & Physical Chemistry", imageUrl: null },
+  { id: "t4", name: "Science Faculty", subject: "Science", classes: "IX–X", pin: "#D4A017", bio: "Strong foundation building for CBSE 9th & 10th Science", imageUrl: null },
 ];
+
+const FALLBACK_GALLERY: GalleryView[] = [
+  { id: "g1", caption: "Board Session", imageUrl: "https://images.unsplash.com/photo-1561089489-f13d5e730d72?w=500&h=400&fit=crop&auto=format" },
+  { id: "g2", caption: "Group Study", imageUrl: "https://images.unsplash.com/photo-1631888717579-50577ecc6553?w=500&h=400&fit=crop&auto=format" },
+  { id: "g3", caption: "Focused Learning", imageUrl: "https://images.unsplash.com/photo-1571193161738-deaba9b6cc26?w=500&h=400&fit=crop&auto=format" },
+  { id: "g4", caption: "Library Hours", imageUrl: "https://images.unsplash.com/photo-1721702754494-fdd7189f946c?w=500&h=400&fit=crop&auto=format" },
+  { id: "g5", caption: "Revision Class", imageUrl: "https://images.unsplash.com/photo-1578593139939-cccb1e98698c?w=500&h=400&fit=crop&auto=format" },
+  { id: "g6", caption: "One-on-One Session", imageUrl: "https://images.unsplash.com/photo-1511629091441-ee46146481b6?w=500&h=400&fit=crop&auto=format" },
+];
+
+// Deterministic little "hand-pinned" wobble, computed from position so the
+// database doesn't need to store cosmetic rotation values.
+const PREVIEW_ROTATIONS = [-1.5, 1, -0.5, 2];
+const CARD_ROTATIONS = [-2.5, 1.5, -1, 2.5];
+const GALLERY_ROTATIONS = [-1, 1.5, -0.5, 2, -1.5, 1];
+
+function useFacultyList() {
+  const [teachers, setTeachers] = useState<TeacherView[]>(FALLBACK_TEACHERS);
+  const [loading, setLoading] = useState(supabaseEnabled);
+
+  useEffect(() => {
+    if (!supabaseEnabled) return;
+    let cancelled = false;
+    fetchFaculty().then((rows: FacultyRow[] | null) => {
+      if (cancelled) return;
+      if (rows) {
+        setTeachers(
+          rows.map((r) => ({
+            id: r.id,
+            name: r.name,
+            subject: r.subject,
+            classes: r.classes,
+            bio: r.bio ?? "",
+            pin: r.pin_color || "#4A90D9",
+            imageUrl: r.image_url,
+          }))
+        );
+      }
+      setLoading(false);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return { teachers, loading };
+}
+
+function useGalleryList() {
+  const [images, setImages] = useState<GalleryView[]>(FALLBACK_GALLERY);
+  const [loading, setLoading] = useState(supabaseEnabled);
+
+  useEffect(() => {
+    if (!supabaseEnabled) return;
+    let cancelled = false;
+    fetchGallery().then((rows: GalleryRow[] | null) => {
+      if (cancelled) return;
+      if (rows) {
+        setImages(rows.map((r) => ({ id: r.id, caption: r.caption, imageUrl: r.image_url })));
+      }
+      setLoading(false);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return { images, loading };
+}
+
+
 
 const BLOG_POSTS = [
   { id: 1, subject: "Mathematics", subjectColor: "#6AAE45", title: "Mastering Quadratic Equations: 3 Methods Every Student Must Know", excerpt: "From factorisation to the discriminant — a complete classroom guide with worked examples and common pitfalls.", date: "12 Aug 2025", readTime: "8 min read", page: 32 },
@@ -42,14 +138,7 @@ const BLOG_POSTS = [
   { id: 3, subject: "Chemistry", subjectColor: "#48A86A", title: "Understanding Organic Reactions: A Visual Approach to Mechanisms", excerpt: "Functional groups, reaction arrows, and memory techniques that stick for board exams and beyond.", date: "2 Aug 2025", readTime: "10 min read", page: 45 },
 ];
 
-const GALLERY_IMGS = [
-  { id: "photo-1561089489-f13d5e730d72", caption: "Board Session", rotate: -1 },
-  { id: "photo-1631888717579-50577ecc6553", caption: "Group Study", rotate: 1.5 },
-  { id: "photo-1571193161738-deaba9b6cc26", caption: "Focused Learning", rotate: -0.5 },
-  { id: "photo-1721702754494-fdd7189f946c", caption: "Library Hours", rotate: 2 },
-  { id: "photo-1578593139939-cccb1e98698c", caption: "Revision Class", rotate: -1.5 },
-  { id: "photo-1511629091441-ee46146481b6", caption: "One-on-One Session", rotate: 1 },
-];
+
 
 /* =========================================================
    GLOBAL STYLES (injected)
@@ -614,6 +703,7 @@ function WhyUsSection({ setPage }: { setPage: (p: Page) => void }) {
 
 function TeachersPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
   const { ref, vis } = useReveal();
+  const { teachers } = useFacultyList();
   return (
     <DusterSection>
       <section className="py-16 px-4 sm:px-6 page-bg" style={{ background: "linear-gradient(180deg, #0D1A07 0%, #0F1E08 100%)" }}>
@@ -624,9 +714,9 @@ function TeachersPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
             <div className="chalk text-lg opacity-65 mt-2">The minds behind the board.</div>
           </div>
           <div ref={ref} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {TEACHERS.map(({ id, name, subject, pin, bio }, i) => (
+            {teachers.slice(0, 4).map(({ id, name, subject, pin, bio, imageUrl }, i) => (
               <div key={id} className={`chalk-anim ${vis ? "vis" : ""}`} style={{ animationDelay: `${i * 0.15}s` }}>
-                <div className="relative p-1" style={{ transform: `rotate(${[-1.5, 1, -0.5, 2][i]}deg)` }}>
+                <div className="relative p-1" style={{ transform: `rotate(${PREVIEW_ROTATIONS[i % PREVIEW_ROTATIONS.length]}deg)` }}>
                   {/* Pin */}
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full z-10 flex items-center justify-center shadow-lg"
                     style={{ background: pin, boxShadow: `0 3px 10px ${pin}60` }}>
@@ -634,21 +724,26 @@ function TeachersPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
                   </div>
                   {/* Card */}
                   <div className="rounded shadow-2xl overflow-hidden teacher-card-hover" style={{ background: "rgba(245,240,228,0.06)", border: "1px solid rgba(245,240,228,0.15)" }}>
-                    {/* Photo placeholder */}
-                    <div className="aspect-[3/4] flex flex-col items-center justify-end pb-4 px-4 relative overflow-hidden"
-                      style={{ background: "linear-gradient(180deg, rgba(30,56,20,0.4) 0%, rgba(20,40,12,0.6) 100%)", borderBottom: "1px solid rgba(245,240,228,0.1)" }}>
-                      {/* Silhouette */}
-                      <div className="absolute top-6 left-1/2 -translate-x-1/2">
-                        <div className="w-16 h-16 rounded-full mx-auto mb-1" style={{ background: "rgba(245,240,228,0.12)", border: "2px dashed rgba(245,240,228,0.25)" }}>
-                          <div className="w-full h-full flex items-center justify-center">
-                            <GraduationCap size={28} style={{ color: "rgba(245,240,228,0.4)" }} />
-                          </div>
-                        </div>
-                        {/* Standing body placeholder */}
-                        <div className="w-24 h-28 mx-auto mt-1 rounded-t-full" style={{ background: "rgba(245,240,228,0.08)", border: "2px dashed rgba(245,240,228,0.18)" }} />
+                    {imageUrl ? (
+                      <div className="aspect-[3/4] overflow-hidden" style={{ borderBottom: "1px solid rgba(245,240,228,0.1)" }}>
+                        <img src={imageUrl} alt={name} className="w-full h-full object-cover" />
                       </div>
-                      <div className="chalk text-xs opacity-40 text-center absolute bottom-2 w-full">Photo coming soon</div>
-                    </div>
+                    ) : (
+                      <div className="aspect-[3/4] flex flex-col items-center justify-end pb-4 px-4 relative overflow-hidden"
+                        style={{ background: "linear-gradient(180deg, rgba(30,56,20,0.4) 0%, rgba(20,40,12,0.6) 100%)", borderBottom: "1px solid rgba(245,240,228,0.1)" }}>
+                        {/* Silhouette */}
+                        <div className="absolute top-6 left-1/2 -translate-x-1/2">
+                          <div className="w-16 h-16 rounded-full mx-auto mb-1" style={{ background: "rgba(245,240,228,0.12)", border: "2px dashed rgba(245,240,228,0.25)" }}>
+                            <div className="w-full h-full flex items-center justify-center">
+                              <GraduationCap size={28} style={{ color: "rgba(245,240,228,0.4)" }} />
+                            </div>
+                          </div>
+                          {/* Standing body placeholder */}
+                          <div className="w-24 h-28 mx-auto mt-1 rounded-t-full" style={{ background: "rgba(245,240,228,0.08)", border: "2px dashed rgba(245,240,228,0.18)" }} />
+                        </div>
+                        <div className="chalk text-xs opacity-40 text-center absolute bottom-2 w-full">Photo coming soon</div>
+                      </div>
+                    )}
                     <div className="p-4">
                       <div className="chalk text-base font-bold">{name}</div>
                       <div className="chalk text-sm mt-0.5" style={{ color: pin, filter: "brightness(1.3)" }}>{subject}</div>
@@ -673,6 +768,7 @@ function TeachersPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
 
 function GalleryPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
   const { ref, vis } = useReveal();
+  const { images } = useGalleryList();
   return (
     <DusterSection>
       <section className="py-16 px-4 sm:px-6 page-bg" style={{ background: "linear-gradient(180deg, #0F1E08 0%, #0D1A07 100%)" }}>
@@ -683,11 +779,11 @@ function GalleryPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
             <div className="chalk text-lg opacity-65 mt-2">Every photo is a story of a lesson learned.</div>
           </div>
           <div ref={ref} className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {GALLERY_IMGS.slice(0, 6).map(({ id, caption, rotate }, i) => (
-              <div key={id + i} className={`chalk-anim ${vis ? "vis" : ""}`} style={{ animationDelay: `${i * 0.1}s`, transform: `rotate(${rotate}deg)` }}>
+            {images.slice(0, 6).map(({ id, caption, imageUrl }, i) => (
+              <div key={id + i} className={`chalk-anim ${vis ? "vis" : ""}`} style={{ animationDelay: `${i * 0.1}s`, transform: `rotate(${GALLERY_ROTATIONS[i % GALLERY_ROTATIONS.length]}deg)` }}>
                 <div className="bg-white p-2 pb-6 shadow-xl" style={{ boxShadow: "0 8px 30px rgba(0,0,0,0.5)" }}>
                   <div className="overflow-hidden" style={{ aspectRatio: i % 3 === 1 ? "3/4" : "4/3" }}>
-                    <img src={`https://images.unsplash.com/${id}?w=400&h=300&fit=crop&auto=format`} alt={caption} className="w-full h-full object-cover" />
+                    <img src={imageUrl} alt={caption} className="w-full h-full object-cover" />
                   </div>
                   <div className="text-center mt-2 text-xs text-gray-600" style={{ fontFamily: "var(--font-heading)" }}>{caption}</div>
                 </div>
@@ -812,8 +908,9 @@ function HomePage({ setPage }: { setPage: (p: Page) => void }) {
    ABOUT PAGE
    ========================================================= */
 function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
-  const [selected, setSelected] = useState<number | null>(null);
+  const [selected, setSelected] = useState<string | null>(null);
   const { ref, vis } = useReveal();
+  const { teachers } = useFacultyList();
 
   return (
     <div className="min-h-screen pt-20 page-bg" style={{ background: "linear-gradient(170deg, #0A1506 0%, #0D1A07 100%)" }}>
@@ -830,10 +927,10 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
           <div className="cork-bg rounded-lg p-8 md:p-12 shadow-2xl" style={{ boxShadow: "0 12px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.15)", border: "8px solid #8B5220" }}>
             {/* Cork border detail */}
             <div ref={ref} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {TEACHERS.map(({ id, name, subject, pin, rotation, bio, classes }, i) => (
+              {teachers.map(({ id, name, subject, pin, bio, classes, imageUrl }, i) => (
                 <div key={id} className={`chalk-anim ${vis ? "vis" : ""} cursor-pointer`} style={{ animationDelay: `${i * 0.18}s` }}
                   onClick={() => setSelected(selected === id ? null : id)}>
-                  <div className="relative pt-4 teacher-card-hover" style={{ transform: `rotate(${rotation}deg)` }}>
+                  <div className="relative pt-4 teacher-card-hover" style={{ transform: `rotate(${CARD_ROTATIONS[i % CARD_ROTATIONS.length]}deg)` }}>
                     {/* Push pin */}
                     <div className="absolute -top-1 left-1/2 -translate-x-1/2 z-10" style={{ width: 18, height: 18, borderRadius: "50%", background: `radial-gradient(circle at 35% 35%, ${pin}EE, ${pin}88)`, boxShadow: `0 3px 8px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.3)` }}>
                       <div style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(255,255,255,0.45)", margin: "3px auto" }} />
@@ -841,16 +938,23 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
                     {/* Paper card */}
                     <div className="bg-[#FFF8F0] shadow-xl overflow-hidden" style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.35)", transform: selected === id ? "scale(1.06)" : "scale(1)", transition: "transform 0.3s" }}>
                       {/* Photo area */}
-                      <div className="aspect-square flex flex-col items-center justify-center relative" style={{ background: "linear-gradient(180deg, #E8E0D0, #D8D0C0)" }}>
-                        {/* Placeholder silhouette */}
-                        <div className="w-14 h-14 rounded-full flex items-center justify-center mb-1" style={{ background: "rgba(100,80,60,0.2)", border: "2px dashed rgba(100,80,60,0.3)" }}>
-                          <GraduationCap size={24} style={{ color: "rgba(100,80,60,0.5)" }} />
+                      {imageUrl ? (
+                        <div className="aspect-square relative overflow-hidden">
+                          <img src={imageUrl} alt={name} className="w-full h-full object-cover" />
+                          <div className="absolute top-0 left-0 right-0 h-1.5" style={{ background: pin }} />
                         </div>
-                        <div className="w-20 h-20 rounded-t-full" style={{ background: "rgba(100,80,60,0.15)", border: "2px dashed rgba(100,80,60,0.2)" }} />
-                        <div className="absolute bottom-2 left-0 right-0 text-center text-xs text-gray-400" style={{ fontFamily: "var(--font-heading)" }}>Photo Placeholder</div>
-                        {/* Subject color strip */}
-                        <div className="absolute top-0 left-0 right-0 h-1.5" style={{ background: pin }} />
-                      </div>
+                      ) : (
+                        <div className="aspect-square flex flex-col items-center justify-center relative" style={{ background: "linear-gradient(180deg, #E8E0D0, #D8D0C0)" }}>
+                          {/* Placeholder silhouette */}
+                          <div className="w-14 h-14 rounded-full flex items-center justify-center mb-1" style={{ background: "rgba(100,80,60,0.2)", border: "2px dashed rgba(100,80,60,0.3)" }}>
+                            <GraduationCap size={24} style={{ color: "rgba(100,80,60,0.5)" }} />
+                          </div>
+                          <div className="w-20 h-20 rounded-t-full" style={{ background: "rgba(100,80,60,0.15)", border: "2px dashed rgba(100,80,60,0.2)" }} />
+                          <div className="absolute bottom-2 left-0 right-0 text-center text-xs text-gray-400" style={{ fontFamily: "var(--font-heading)" }}>Photo Placeholder</div>
+                          {/* Subject color strip */}
+                          <div className="absolute top-0 left-0 right-0 h-1.5" style={{ background: pin }} />
+                        </div>
+                      )}
                       {/* Info */}
                       <div className="p-3 border-t border-gray-200">
                         <div className="text-sm font-bold text-gray-800" style={{ fontFamily: "var(--font-heading)", fontSize: "1.1rem" }}>{name}</div>
@@ -938,7 +1042,8 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
    ========================================================= */
 function GalleryPage() {
   const { ref, vis } = useReveal();
-  const extended = [...GALLERY_IMGS, ...GALLERY_IMGS.slice(0, 3)];
+  const { images } = useGalleryList();
+  const extended = images.length > 3 ? [...images, ...images.slice(0, 3)] : images;
 
   return (
     <div className="min-h-screen pt-20 page-bg" style={{ background: "linear-gradient(170deg, #0A1506 0%, #0D1A07 100%)" }}>
@@ -952,30 +1057,39 @@ function GalleryPage() {
 
           {/* Corkboard-style gallery */}
           <div className="cork-bg rounded-lg p-8 md:p-12 shadow-2xl" style={{ border: "8px solid #8B5220" }}>
-            <div ref={ref} className="columns-2 md:columns-3 gap-5 space-y-5">
-              {extended.map(({ id, caption, rotate }, i) => (
-                <div key={`${id}-${i}`} className={`break-inside-avoid chalk-anim ${vis ? "vis" : ""}`}
-                  style={{ animationDelay: `${i * 0.08}s`, transform: `rotate(${rotate + (i % 2 === 0 ? 0.3 : -0.3)}deg)`, display: "inline-block", width: "100%", marginBottom: "1.25rem" }}>
-                  <div className="bg-white p-2 pb-7 shadow-xl group cursor-pointer hover:scale-105 transition-transform" style={{ boxShadow: "0 6px 24px rgba(0,0,0,0.45)" }}>
-                    {/* Tape strips */}
-                    {i % 3 === 0 && <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-12 h-4 opacity-50 rotate-1" style={{ background: "rgba(220,210,170,0.7)", borderRadius: 2 }} />}
-                    <div className="overflow-hidden" style={{ aspectRatio: i % 3 === 1 ? "3/4" : "4/3" }}>
-                      <img
-                        src={`https://images.unsplash.com/${id}?w=500&h=400&fit=crop&auto=format`}
-                        alt={caption}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
+            {extended.length === 0 ? (
+              <div className="chalk text-center opacity-60 py-10">Photos coming soon.</div>
+            ) : (
+              <div ref={ref} className="columns-2 md:columns-3 gap-5 space-y-5">
+                {extended.map(({ id, caption, imageUrl }, i) => {
+                  const rotate = GALLERY_ROTATIONS[i % GALLERY_ROTATIONS.length];
+                  return (
+                    <div key={`${id}-${i}`} className={`break-inside-avoid chalk-anim ${vis ? "vis" : ""}`}
+                      style={{ animationDelay: `${i * 0.08}s`, transform: `rotate(${rotate + (i % 2 === 0 ? 0.3 : -0.3)}deg)`, display: "inline-block", width: "100%", marginBottom: "1.25rem" }}>
+                      <div className="bg-white p-2 pb-7 shadow-xl group cursor-pointer hover:scale-105 transition-transform" style={{ boxShadow: "0 6px 24px rgba(0,0,0,0.45)" }}>
+                        {/* Tape strips */}
+                        {i % 3 === 0 && <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-12 h-4 opacity-50 rotate-1" style={{ background: "rgba(220,210,170,0.7)", borderRadius: 2 }} />}
+                        <div className="overflow-hidden" style={{ aspectRatio: i % 3 === 1 ? "3/4" : "4/3" }}>
+                          <img
+                            src={imageUrl}
+                            alt={caption}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        </div>
+                        <div className="text-center mt-2 text-gray-600 text-sm" style={{ fontFamily: "var(--font-heading)" }}>{caption}</div>
+                      </div>
                     </div>
-                    <div className="text-center mt-2 text-gray-600 text-sm" style={{ fontFamily: "var(--font-heading)" }}>{caption}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
-          <p className="chalk text-center text-sm opacity-50 mt-6">
-            Photos are illustrative placeholders — actual classroom and event photographs to be added.
-          </p>
+          {!supabaseEnabled && (
+            <p className="chalk text-center text-sm opacity-50 mt-6">
+              Photos are illustrative placeholders — connect the admin dashboard to manage real ones.
+            </p>
+          )}
         </div>
       </section>
     </div>
@@ -1294,6 +1408,13 @@ function LightModeStyles() {
    MAIN APP
    ========================================================= */
 export default function App() {
+  // Hidden admin entry point — reachable ONLY by typing the exact secret
+  // path directly into the browser. It is never linked from the navbar,
+  // footer, or any page, and is intentionally excluded from robots.txt.
+  if (typeof window !== "undefined" && window.location.pathname === ADMIN_PATH) {
+    return <AdminApp />;
+  }
+
   const [page, setPage] = useState<Page>("home");
   const [dark, setDark] = useState(true);
 
