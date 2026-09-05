@@ -28,7 +28,7 @@ const BRAND = {
   phone2: "86789 78053",
   phone1Href: "+919171119078",
   phone2Href: "+918678978053",
-  email: "info@saicoachingcenter.in", // TODO: placeholder — replace with the real business email
+  email: "balamk22@gmail.com", // TODO: placeholder — replace with the real business email
   mapsUrl: "https://maps.app.goo.gl/bko1f4bbHuaCosL6A",
   mapEmbedSrc: "https://www.google.com/maps?q=12.9506548,80.2353005&z=16&output=embed",
 };
@@ -658,7 +658,7 @@ function SubjectsSection() {
 function WhyUsSection({ setPage }: { setPage: (p: Page) => void }) {
   const { ref, vis } = useReveal();
   const reasons = [
-    { icon: <Award size={18} />, title: "Expert Faculty", desc: "Subject-specialist teachers with deep CBSE expertise from Class IX through XII" },
+    { icon: <Award size={18} />, title: "Expert Faculty", desc: "Subject-specialist teachers with deep CBSE expertise from Class IX to XII" },
     { icon: <Users size={18} />, title: "Small Batch Sizes", desc: "Maximum 15 students per batch — every student gets personal attention" },
     { icon: <Clock size={18} />, title: "Flexible Schedules", desc: "Morning, afternoon & evening slots to fit your school timetable" },
     { icon: <BookOpen size={18} />, title: "Curated Study Material", desc: "In-house notes, question banks, and solved CBSE papers" },
@@ -996,10 +996,12 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
                   <div className="space-y-4">
                     <div className="chalk text-xl font-bold chalk-yellow">How It All Started</div>
                     <div className="chalk text-base opacity-80 leading-relaxed">
-                      {BRAND.name} was founded with one belief: that every student who struggles with Mathematics or Science is simply waiting for the right teacher. Our founders — passionate educators themselves — set up a small tuition room in {BRAND.location} and began with a handful of students.
+                      {BRAND.name} was founded with one belief: that every student who struggles with Mathematics or Science 
+                      is simply waiting for the right teacher. Our founders — passionate educators themselves — set up a small
+                       tuition room in {BRAND.location} and began with a handful of students.
                     </div>
                     <div className="chalk text-base opacity-80 leading-relaxed">
-                      Since then, we've grown into a full CBSE coaching center for Classes IX through XII in Mathematics, Physics &amp; Chemistry — with home tuition and online classes for families who can't make it in. The board on our wall has never stopped being written upon.
+                      Since then, we've grown into a full CBSE coaching center for Classes IX to XII in Mathematics, XI & XII Physics &amp; Chemistry — with home tuition and online classes for families who can't make it in. The board on our wall has never stopped being written upon.
                     </div>
                   </div>
                   <div className="space-y-4">
@@ -1174,7 +1176,7 @@ function ContactPage() {
     e.preventDefault();
     setStatus("sending");
     try {
-      const res = await fetch("https://formsubmit.co/ajax/fy6355128@gmail.com", {
+      const res = await fetch("https://formsubmit.co/ajax/balamk22@gmail.com", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
@@ -1338,7 +1340,7 @@ function Footer({ setPage }: { setPage: (p: Page) => void }) {
         <div>
           <div className="chalk text-xl font-bold mb-1">{BRAND.name}</div>
           <div className="chalk text-sm opacity-50 mb-3">{BRAND.location}</div>
-          <div className="text-xs opacity-50 leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>CBSE coaching from Class 9 through Class 12 in Mathematics, Physics &amp; Chemistry. Home tuition and online classes available.</div>
+          <div className="text-xs opacity-50 leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>CBSE coaching from Class 9 to Class 12 in Mathematics, Physics &amp; Chemistry. Home tuition and online classes available.</div>
         </div>
         {[
           { heading: "Pages", items: NAV_ITEMS.map(({ label, page: p }) => ({ label, page: p, href: undefined as string | undefined })) },
