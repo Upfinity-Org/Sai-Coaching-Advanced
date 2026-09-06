@@ -17,6 +17,78 @@ import { fetchFaculty, fetchGallery, FacultyRow, GalleryRow } from "../lib/conte
    ========================================================= */
 type Page = "home" | "about" | "gallery" | "blog" | "contact";
 
+/* ---- URL routing + per-page SEO metadata ----
+   The site is a single-page app, but each "page" now gets a real,
+   shareable, indexable URL (via the History API) instead of only ever
+   living at "/". This lets Google discover, crawl, and rank /about,
+   /gallery, /blog and /contact separately with their own <title> and
+   meta description. Netlify's public/_redirects already rewrites every
+   path to /index.html with a 200, so deep links and refreshes work. */
+const PAGE_PATHS: Record<Page, string> = {
+  home: "/",
+  about: "/about",
+  gallery: "/gallery",
+  blog: "/blog",
+  contact: "/contact",
+};
+
+const PATH_TO_PAGE: Record<string, Page> = Object.fromEntries(
+  Object.entries(PAGE_PATHS).map(([page, path]) => [path, page as Page])
+) as Record<string, Page>;
+
+const PAGE_SEO: Record<Page, { title: string; description: string }> = {
+  home: {
+    title: "Sai Coaching Center, Thoraipakkam — CBSE Tuition for Maths, Physics & Chemistry",
+    description:
+      "Sai Coaching Center in Thoraipakkam, Chennai offers CBSE tuition for 9th & 10th (Maths & Science) and 11th & 12th (Maths, Physics & Chemistry), with home tuition and online classes available.",
+  },
+  about: {
+    title: "About Us — Sai Coaching Center, Thoraipakkam | CBSE Tuition Chennai",
+    description:
+      "Learn about Sai Coaching Center's teaching philosophy, experienced faculty, and concept-first approach to CBSE Maths, Physics and Chemistry tuition in Thoraipakkam, Chennai.",
+  },
+  gallery: {
+    title: "Gallery — Sai Coaching Center, Thoraipakkam",
+    description:
+      "A look inside Sai Coaching Center's classrooms, study sessions and campus life in Thoraipakkam, Chennai.",
+  },
+  blog: {
+    title: "Blog — CBSE Study Tips & Exam Guidance | Sai Coaching Center",
+    description:
+      "Study tips, exam strategy and subject guidance for CBSE students in Maths, Physics and Chemistry from Sai Coaching Center, Thoraipakkam.",
+  },
+  contact: {
+    title: "Contact Us — Sai Coaching Center, Thoraipakkam | Book a Free Demo Class",
+    description:
+      "Get in touch with Sai Coaching Center in Thoraipakkam, Chennai. Call, email, or fill the enquiry form to book a free demo class in Maths, Physics or Chemistry.",
+  },
+};
+
+function getPageFromLocation(): Page {
+  if (typeof window === "undefined") return "home";
+  return PATH_TO_PAGE[window.location.pathname] ?? "home";
+}
+
+function setMetaTag(name: string, content: string) {
+  let el = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement | null;
+  if (!el) {
+    el = document.createElement("meta");
+    el.setAttribute("name", name);
+    document.head.appendChild(el);
+  }
+  el.setAttribute("content", content);
+}
+
+function setCanonical(path: string) {
+  let el = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+  if (!el) {
+    el = document.createElement("link");
+    el.setAttribute("rel", "canonical");
+    document.head.appendChild(el);
+  }
+  el.setAttribute("href", `https://saicoaching.netlify.app${path}`);
+}
+
 /* ---- Business info — single source of truth ----
    NOTE: Email is a placeholder (not on the source info card) — swap in the real one. */
 const BRAND = {
@@ -1425,7 +1497,7 @@ export default function App() {
     return <AdminApp />;
   }
 
-  const [page, setPage] = useState<Page>("home");
+  const [page, setPage] = useState<Page>(() => getPageFromLocation());
   const [dark, setDark] = useState(true);
 
   useEffect(() => {
@@ -1436,7 +1508,29 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [page]);
 
-  const handleSetPage = (p: Page) => setPage(p);
+  // Keep the URL, <title>, meta description, and canonical link in sync
+  // with the visible page so each section is a distinct, indexable URL.
+  useEffect(() => {
+    const seo = PAGE_SEO[page];
+    document.title = seo.title;
+    setMetaTag("description", seo.description);
+    setCanonical(PAGE_PATHS[page]);
+  }, [page]);
+
+  // Support browser back/forward between the app's pages.
+  useEffect(() => {
+    const onPopState = () => setPage(getPageFromLocation());
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
+  const handleSetPage = (p: Page) => {
+    setPage(p);
+    const path = PAGE_PATHS[p];
+    if (typeof window !== "undefined" && window.location.pathname !== path) {
+      window.history.pushState({}, "", path);
+    }
+  };
 
   const pages: Record<Page, React.ReactNode> = {
     home: <HomePage setPage={handleSetPage} />,
