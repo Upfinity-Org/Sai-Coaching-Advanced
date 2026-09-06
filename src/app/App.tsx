@@ -95,7 +95,7 @@ const BRAND = {
   name: "Sai Coaching Center",
   location: "Thoraipakkam",
   cityLine: "Thoraipakkam, Chennai",
-  addressLine: "Thoraipakkam, Chennai, Tamil Nadu", // TODO: replace with exact door no. / street once confirmed
+  addressLine: "No 10, Sai Nagar 1st Main Road, Thoraipakkam, Chennai, Tamil Nadu",
   phone1: "91711 19078",
   phone2: "86789 78053",
   phone1Href: "+919171119078",
