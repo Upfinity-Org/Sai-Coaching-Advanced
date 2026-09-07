@@ -86,7 +86,7 @@ function setCanonical(path: string) {
     el.setAttribute("rel", "canonical");
     document.head.appendChild(el);
   }
-  el.setAttribute("href", `https://saicoaching.netlify.app${path}`);
+  el.setAttribute("href", `https://saicoaching.com${path}`);
 }
 
 /* ---- Business info — single source of truth ----
