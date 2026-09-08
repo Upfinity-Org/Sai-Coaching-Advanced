@@ -610,7 +610,7 @@ function HeroSection({ setPage }: { setPage: (p: Page) => void }) {
             </div>
 
             <div className={`flex flex-wrap justify-center gap-6 md:gap-10 pt-4 chalk-anim ${ready ? "vis" : ""}`} style={{ animationDelay: "2s" }}>
-              {[["3", "Subjects"], ["2", "Levels"], ["2", "Class Modes"], ["CBSE", "Board"]].map(([n, l]) => (
+              {[["3", "Subjects"], ["2", "Levels"], ["2", "Class Modes"], ["CBSE & SB", "Board"]].map(([n, l]) => (
                 <div key={l} className="text-center">
                   <div className="chalk text-2xl md:text-3xl font-bold">{n}</div>
                   <div className="chalk text-sm opacity-60">{l}</div>
