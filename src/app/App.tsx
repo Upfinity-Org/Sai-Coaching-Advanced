@@ -1418,8 +1418,19 @@ function Footer({ setPage }: { setPage: (p: Page) => void }) {
         </a>
       </div>
 
-      <div className="text-center py-4" style={{ borderTop: "1px solid rgba(245,240,228,0.05)" }}>
+      <div className="text-center py-4 space-y-1" style={{ borderTop: "1px solid rgba(245,240,228,0.05)" }}>
         <div className="text-xs opacity-35" style={{ fontFamily: "var(--font-body)" }}>© 2025 {BRAND.name} · All rights reserved · CBSE Coaching, {BRAND.location}</div>
+        <div className="text-xs opacity-35" style={{ fontFamily: "var(--font-body)" }}>
+          Designed &amp; developed by{" "}
+          <a
+            href="https://upfinity.netlify.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-90 transition-opacity underline underline-offset-2"
+          >
+            Upfinity
+          </a>
+        </div>
       </div>
     </footer>
   );
