@@ -17,13 +17,6 @@ import { fetchFaculty, fetchGallery, FacultyRow, GalleryRow } from "../lib/conte
    ========================================================= */
 type Page = "home" | "about" | "gallery" | "blog" | "contact";
 
-/* ---- URL routing + per-page SEO metadata ----
-   The site is a single-page app, but each "page" now gets a real,
-   shareable, indexable URL (via the History API) instead of only ever
-   living at "/". This lets Google discover, crawl, and rank /about,
-   /gallery, /blog and /contact separately with their own <title> and
-   meta description. Netlify's public/_redirects already rewrites every
-   path to /index.html with a 200, so deep links and refreshes work. */
 const PAGE_PATHS: Record<Page, string> = {
   home: "/",
   about: "/about",
@@ -89,8 +82,6 @@ function setCanonical(path: string) {
   el.setAttribute("href", `https://saicoaching.com${path}`);
 }
 
-/* ---- Business info — single source of truth ----
-   NOTE: Email is a placeholder (not on the source info card) — swap in the real one. */
 const BRAND = {
   name: "Sai Coaching Center",
   location: "Thoraipakkam",
@@ -105,11 +96,6 @@ const BRAND = {
   mapEmbedSrc: "https://www.google.com/maps?q=12.9506548,80.2353005&z=16&output=embed",
 };
 
-/* ---- Faculty & Gallery ----
-   These are shown when Supabase isn't configured (local preview) or as the
-   very first thing the visitor sees while the live data is loading. Once
-   Supabase is set up, the admin dashboard is the actual source of truth —
-   see src/admin. */
 type TeacherView = {
   id: string;
   name: string;
@@ -142,8 +128,6 @@ const FALLBACK_GALLERY: GalleryView[] = [
   { id: "g6", caption: "One-on-One Session", imageUrl: "https://images.unsplash.com/photo-1511629091441-ee46146481b6?w=500&h=400&fit=crop&auto=format" },
 ];
 
-// Deterministic little "hand-pinned" wobble, computed from position so the
-// database doesn't need to store cosmetic rotation values.
 const PREVIEW_ROTATIONS = [-1.5, 1, -0.5, 2];
 const CARD_ROTATIONS = [-2.5, 1.5, -1, 2.5];
 const GALLERY_ROTATIONS = [-1, 1.5, -0.5, 2, -1.5, 1];
@@ -202,15 +186,11 @@ function useGalleryList() {
   return { images, loading };
 }
 
-
-
 const BLOG_POSTS = [
   { id: 1, subject: "Mathematics", subjectColor: "#6AAE45", title: "Mastering Quadratic Equations: 3 Methods Every Student Must Know", excerpt: "From factorisation to the discriminant — a complete classroom guide with worked examples and common pitfalls.", date: "12 Aug 2025", readTime: "8 min read", page: 32 },
   { id: 2, subject: "Physics", subjectColor: "#4A90D9", title: "Newton's Laws in Real-World Scenarios: Why F = ma Explains Everything", excerpt: "How the three laws of motion govern car brakes, rockets, and your cricket ball — with free-body diagrams.", date: "8 Aug 2025", readTime: "6 min read", page: 18 },
   { id: 3, subject: "Chemistry", subjectColor: "#48A86A", title: "Understanding Organic Reactions: A Visual Approach to Mechanisms", excerpt: "Functional groups, reaction arrows, and memory techniques that stick for board exams and beyond.", date: "2 Aug 2025", readTime: "10 min read", page: 45 },
 ];
-
-
 
 /* =========================================================
    GLOBAL STYLES (injected)
@@ -361,23 +341,16 @@ function useDuster() {
 function MathChalkSVG({ drawn }: { drawn: boolean }) {
   return (
     <svg viewBox="0 0 420 200" className="w-full max-w-md opacity-80" fill="none">
-      {/* Coordinate axes */}
       <line x1="30" y1="170" x2="200" y2="170" stroke="rgba(245,240,228,0.5)" strokeWidth="1.5" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "0.1s" }} />
       <line x1="30" y1="30" x2="30" y2="170" stroke="rgba(245,240,228,0.5)" strokeWidth="1.5" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "0.2s" }} />
-      {/* Parabola */}
       <path d="M 50 160 Q 115 30 180 155" stroke="rgba(170,210,255,0.85)" strokeWidth="2" strokeLinecap="round" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "0.5s" }} />
-      {/* Quadratic label */}
       <text x="190" y="80" fill="rgba(245,240,228,0.88)" fontSize="14" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 1.5s" }}>y = ax² + bx + c</text>
-      {/* Pythagorean theorem */}
       <polygon points="260,170 360,170 260,90" stroke="rgba(255,230,120,0.8)" strokeWidth="1.5" fill="none" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "0.8s" }} />
       <text x="265" y="185" fill="rgba(255,230,120,0.85)" fontSize="12" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 1.8s" }}>a</text>
       <text x="368" y="185" fill="rgba(255,230,120,0.85)" fontSize="12" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 1.8s" }}>b</text>
       <text x="245" y="130" fill="rgba(255,230,120,0.85)" fontSize="12" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 1.8s" }}>c</text>
-      {/* Right angle mark */}
       <polyline points="260,155 275,155 275,170" stroke="rgba(255,230,120,0.7)" strokeWidth="1.2" fill="none" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "1.2s" }} />
-      {/* Formula */}
       <text x="30" y="25" fill="rgba(160,230,140,0.88)" fontSize="13" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2s" }}>a² + b² = c²</text>
-      {/* Integration hint */}
       <text x="200" y="155" fill="rgba(255,175,175,0.85)" fontSize="22" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.3s" }}>∫ f(x)dx</text>
     </svg>
   );
@@ -386,23 +359,16 @@ function MathChalkSVG({ drawn }: { drawn: boolean }) {
 function PhysicsChalkSVG({ drawn }: { drawn: boolean }) {
   return (
     <svg viewBox="0 0 420 200" className="w-full max-w-md opacity-80" fill="none">
-      {/* Wave */}
       <path d="M 20 100 C 50 60, 80 140, 110 100 C 140 60, 170 140, 200 100 C 230 60, 260 140, 290 100" stroke="rgba(170,210,255,0.8)" strokeWidth="2" strokeLinecap="round" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "0.3s" }} />
       <text x="300" y="108" fill="rgba(170,210,255,0.85)" fontSize="12" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 1.5s" }}>λ</text>
-      {/* Arrow for force */}
       <line x1="50" y1="160" x2="150" y2="160" stroke="rgba(255,230,120,0.85)" strokeWidth="2.5" strokeLinecap="round" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "0.6s" }} />
       <polygon points="150,155 165,160 150,165" fill="rgba(255,230,120,0.85)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.3s 1.2s" }} />
       <text x="85" y="150" fill="rgba(255,230,120,0.9)" fontSize="13" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 1.4s" }}>F⃗</text>
-      {/* Box being pushed */}
       <rect x="165" y="145" width="40" height="30" stroke="rgba(245,240,228,0.7)" strokeWidth="1.5" fill="none" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "1s" }} />
       <text x="174" y="165" fill="rgba(245,240,228,0.75)" fontSize="11" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2s" }}>m</text>
-      {/* Ground line */}
       <line x1="30" y1="175" x2="240" y2="175" stroke="rgba(245,240,228,0.4)" strokeWidth="1" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "0.8s" }} />
-      {/* F=ma */}
       <text x="270" y="50" fill="rgba(160,230,140,0.9)" fontSize="26" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.2s" }}>F = ma</text>
-      {/* E=mc2 */}
       <text x="270" y="90" fill="rgba(255,175,175,0.88)" fontSize="22" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.5s" }}>E = mc²</text>
-      {/* v = u+at */}
       <text x="270" y="130" fill="rgba(255,230,120,0.85)" fontSize="18" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.8s" }}>v = u + at</text>
     </svg>
   );
@@ -417,11 +383,9 @@ function ChemistryChalkSVG({ drawn }: { drawn: boolean }) {
   const pts = hex.map(([x, y]) => `${x},${y}`).join(" ");
   return (
     <svg viewBox="0 0 420 200" className="w-full max-w-md opacity-80" fill="none">
-      {/* Benzene ring */}
       <polygon points={pts} stroke="rgba(160,230,140,0.85)" strokeWidth="2" fill="none" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "0.3s" }} />
       <circle cx={cx} cy={cy} r={r * 0.55} stroke="rgba(160,230,140,0.6)" strokeWidth="1.5" fill="none" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "0.9s" }} />
       <text x="65" y="178" fill="rgba(160,230,140,0.85)" fontSize="12" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 1.8s" }}>C₆H₆</text>
-      {/* Water molecule */}
       <circle cx="240" cy="80" r="16" stroke="rgba(170,210,255,0.85)" strokeWidth="1.8" fill="none" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "1.1s" }} />
       <circle cx="200" cy="55" r="10" stroke="rgba(245,240,228,0.75)" strokeWidth="1.5" fill="none" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "1.4s" }} />
       <circle cx="280" cy="55" r="10" stroke="rgba(245,240,228,0.75)" strokeWidth="1.5" fill="none" className={`svg-chalk ${drawn ? "drawn" : ""}`} style={{ animationDelay: "1.6s" }} />
@@ -431,9 +395,7 @@ function ChemistryChalkSVG({ drawn }: { drawn: boolean }) {
       <text x="194" y="57" fill="rgba(245,240,228,0.8)" fontSize="11" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.4s" }}>H</text>
       <text x="277" y="57" fill="rgba(245,240,228,0.8)" fontSize="11" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.4s" }}>H</text>
       <text x="210" y="108" fill="rgba(170,210,255,0.88)" fontSize="13" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.6s" }}>H₂O</text>
-      {/* Reaction */}
       <text x="170" y="155" fill="rgba(255,230,120,0.88)" fontSize="13" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 2.8s" }}>2H₂ + O₂ → 2H₂O</text>
-      {/* CO2 */}
       <text x="300" y="160" fill="rgba(255,175,175,0.85)" fontSize="18" fontFamily="var(--font-heading)" style={{ opacity: drawn ? 1 : 0, transition: "opacity 0.5s 3s" }}>CO₂</text>
     </svg>
   );
@@ -442,19 +404,14 @@ function ChemistryChalkSVG({ drawn }: { drawn: boolean }) {
 /* =========================================================
    SHARED UI COMPONENTS
    ========================================================= */
-
-// The Blackboard with wooden frame
 function Board({ children, className = "", style = {} }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
   return (
     <div className={`wood-frame p-3 md:p-4 rounded-sm ${className}`} style={{ boxShadow: "0 8px 50px rgba(0,0,0,0.55), 0 2px 12px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.12)", ...style }}>
-      {/* Top chalk tray ledge detail */}
       <div className="relative board-bg rounded-sm overflow-hidden" style={{ boxShadow: "inset 0 0 80px rgba(0,0,0,0.45), inset 0 0 30px rgba(0,0,0,0.3)" }}>
         <div className="board-noise" />
-        {/* Smudge marks */}
         <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: "radial-gradient(ellipse 120px 60px at 20% 35%, rgba(255,255,255,0.025) 0%, transparent 100%), radial-gradient(ellipse 80px 40px at 75% 60%, rgba(255,255,255,0.018) 0%, transparent 100%), radial-gradient(ellipse 150px 30px at 55% 20%, rgba(255,255,255,0.012) 0%, transparent 100%)" }} />
         <div className="relative">{children}</div>
       </div>
-      {/* Bottom chalk tray */}
       <div className="flex gap-2 mt-1.5 px-2 items-end">
         {[...Array(5)].map((_, i) => (
           <div key={i} className="rounded-full" style={{ width: `${12 + i * 4}px`, height: "6px", background: `rgba(245,240,228,${0.55 + i * 0.06})`, transform: `rotate(${-2 + i}deg)` }} />
@@ -465,18 +422,15 @@ function Board({ children, className = "", style = {} }: { children: React.React
   );
 }
 
-// Duster Wipe Section — triggers on scroll enter
 function DusterSection({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const { ref, phase } = useDuster();
   const showDust = phase === "wiping";
 
   return (
     <div ref={ref} className={`relative overflow-hidden ${className}`}>
-      {/* Duster sweep overlay */}
       {showDust && (
         <div className="absolute inset-0 z-20 pointer-events-none" style={{ animation: "dusterMove 0.85s ease-in-out forwards" }}>
           <div style={{ width: "30%", height: "100%", background: "linear-gradient(90deg, transparent, rgba(210,230,200,0.5) 40%, rgba(230,245,220,0.65) 50%, rgba(210,230,200,0.5) 60%, transparent)", position: "absolute", inset: 0 }} />
-          {/* Chalk dust particles */}
           {Array.from({ length: 18 }).map((_, i) => (
             <div key={i} className="absolute rounded-full" style={{
               width: `${2 + Math.random() * 4}px`, height: `${2 + Math.random() * 4}px`,
@@ -499,7 +453,6 @@ function DusterSection({ children, className = "" }: { children: React.ReactNode
   );
 }
 
-// Chalk rule divider
 function ChalkRule() {
   return <div className="w-full h-px my-1 opacity-30" style={{ background: "repeating-linear-gradient(90deg, rgba(245,240,228,0.7) 0px, rgba(245,240,228,0.7) 8px, transparent 8px, transparent 12px)" }} />;
 }
@@ -538,7 +491,12 @@ function Navbar({ page, setPage, dark, setDark }: { page: Page; setPage: (p: Pag
       <div className="max-w-[1440px] mx-auto px-5 flex items-center justify-between gap-4">
         {/* Logo */}
         <button onClick={() => { setPage("home"); setOpen(false); }} className="flex items-center gap-2.5 group">
-          <div className="w-9 h-9 rounded flex items-center justify-center text-white font-bold text-sm shrink-0" style={{ background: "linear-gradient(135deg, #2C5016, #5A9040)", boxShadow: "0 2px 12px rgba(90,144,64,0.4)", fontFamily: "var(--font-body)" }}>SC</div>
+          <img
+            src="/logo.png"
+            alt={`${BRAND.name} logo`}
+            className="w-9 h-9 rounded object-contain shrink-0"
+            style={{ boxShadow: "0 2px 12px rgba(90,144,64,0.4)" }}
+          />
           <div>
             <div className="chalk text-lg font-bold leading-none tracking-wide">Sai Coaching</div>
             <div className="text-xs font-medium tracking-widest uppercase opacity-60" style={{ color: "rgba(245,240,228,0.7)", fontFamily: "var(--font-body)" }}>Center</div>
@@ -610,15 +568,12 @@ function HeroSection({ setPage }: { setPage: (p: Page) => void }) {
       <div className="w-full max-w-[1440px]">
         <Board className="w-full">
           <div className="px-6 py-10 md:px-12 md:py-14 min-h-[60vh] flex flex-col justify-between">
-            {/* Top corner annotations */}
             <div className="flex justify-between items-start">
               <div className="chalk text-sm opacity-60" style={{ transform: "rotate(-1deg)" }}>CBSE Coaching</div>
               <div className="chalk text-sm opacity-60 text-right" style={{ transform: "rotate(1deg)" }}>Home Tuition &amp; Online Classes</div>
             </div>
 
-            {/* Main content */}
             <div className="flex-1 flex flex-col items-center justify-center py-8 gap-6">
-              {/* Handwritten headline */}
               <div className="text-center">
                 <div className={`chalk text-2xl md:text-3xl opacity-70 mb-2 chalk-anim ${ready ? "vis" : ""}`} style={{ animationDelay: "0.1s" }}>
                   — Welcome to —
@@ -632,7 +587,6 @@ function HeroSection({ setPage }: { setPage: (p: Page) => void }) {
                 </div>
               </div>
 
-              {/* Equations row */}
               <div className={`flex flex-wrap justify-center gap-4 mt-2 chalk-anim ${ready ? "vis" : ""}`} style={{ animationDelay: "1s" }}>
                 {["x = (-b ± √D) / 2a", "F = ma", "ΔH = Q − W", "E = mc²"].map((eq, i) => (
                   <span key={i} className="font-mono-eq text-sm px-3 py-1 rounded" style={{ color: ["rgba(170,210,255,0.85)", "rgba(255,230,120,0.85)", "rgba(160,230,140,0.85)", "rgba(255,175,175,0.85)"][i], border: `1px solid ${["rgba(170,210,255,0.25)", "rgba(255,230,120,0.25)", "rgba(160,230,140,0.25)", "rgba(255,175,175,0.25)"][i]}`, fontFamily: "JetBrains Mono, monospace" }}>
@@ -641,12 +595,10 @@ function HeroSection({ setPage }: { setPage: (p: Page) => void }) {
                 ))}
               </div>
 
-              {/* Tagline */}
               <p className={`chalk text-lg md:text-xl text-center max-w-lg opacity-75 chalk-anim ${ready ? "vis" : ""}`} style={{ animationDelay: "1.3s", lineHeight: 1.5 }}>
                 Where every lesson is a discovery, every equation tells a story, and every student becomes a problem-solver.
               </p>
 
-              {/* CTA buttons */}
               <div className={`flex flex-col sm:flex-row gap-3 mt-2 chalk-anim ${ready ? "vis" : ""}`} style={{ animationDelay: "1.6s" }}>
                 <button onClick={() => setPage("about")} className="flex items-center gap-2 px-6 py-3 font-semibold rounded transition-all hover:scale-105" style={{ background: "rgba(245,240,228,0.12)", border: "2px solid rgba(245,240,228,0.45)", color: "rgba(245,240,228,0.93)", fontFamily: "var(--font-body)" }}>
                   Meet Our Faculty <ChevronRight size={18} />
@@ -657,7 +609,6 @@ function HeroSection({ setPage }: { setPage: (p: Page) => void }) {
               </div>
             </div>
 
-            {/* Bottom stats row */}
             <div className={`flex flex-wrap justify-center gap-6 md:gap-10 pt-4 chalk-anim ${ready ? "vis" : ""}`} style={{ animationDelay: "2s" }}>
               {[["3", "Subjects"], ["2", "Levels"], ["2", "Class Modes"], ["CBSE", "Board"]].map(([n, l]) => (
                 <div key={l} className="text-center">
@@ -669,7 +620,6 @@ function HeroSection({ setPage }: { setPage: (p: Page) => void }) {
           </div>
         </Board>
 
-        {/* Scroll indicator */}
         <div className="flex flex-col items-center mt-8 gap-1" style={{ color: "rgba(245,240,228,0.4)" }}>
           <span className="chalk text-sm">scroll to continue the lesson</span>
           <ChevronDown size={20} style={{ animation: "scrollBounce 1.6s ease-in-out infinite" }} />
@@ -705,16 +655,13 @@ function SubjectsSection() {
               <DusterSection>
                 <Board className="h-full">
                   <div className="p-6 md:p-8 flex flex-col gap-4">
-                    {/* Header */}
                     <div className="flex items-center justify-between">
                       <div className={`${color} text-2xl md:text-3xl font-bold`}>{title}</div>
                       <span className="chalk text-sm opacity-60 font-mono-eq" style={{ fontFamily: "JetBrains Mono, monospace" }}>{tag}</span>
                     </div>
                     <ChalkRule />
-                    {/* SVG illustration */}
                     <div className="flex justify-center py-2">{svg}</div>
                     <ChalkRule />
-                    {/* Description */}
                     <p className="chalk text-base opacity-80 leading-relaxed">{desc}</p>
                   </div>
                 </Board>
@@ -763,7 +710,6 @@ function WhyUsSection({ setPage }: { setPage: (p: Page) => void }) {
                 ))}
               </div>
 
-              {/* Chalk underline emphasis */}
               <div className="mt-8 text-center">
                 <div className="chalk text-xl opacity-80" style={{ transform: "rotate(-0.5deg)" }}>
                   ∴ Your child&apos;s success is our <span className="chalk-yellow">only equation.</span>
@@ -797,12 +743,10 @@ function TeachersPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
             {teachers.slice(0, 4).map(({ id, name, subject, pin, bio, imageUrl }, i) => (
               <div key={id} className={`chalk-anim ${vis ? "vis" : ""}`} style={{ animationDelay: `${i * 0.15}s` }}>
                 <div className="relative p-1" style={{ transform: `rotate(${PREVIEW_ROTATIONS[i % PREVIEW_ROTATIONS.length]}deg)` }}>
-                  {/* Pin */}
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full z-10 flex items-center justify-center shadow-lg"
                     style={{ background: pin, boxShadow: `0 3px 10px ${pin}60` }}>
                     <div className="w-2 h-2 rounded-full bg-white opacity-40" />
                   </div>
-                  {/* Card */}
                   <div className="rounded shadow-2xl overflow-hidden teacher-card-hover" style={{ background: "rgba(245,240,228,0.06)", border: "1px solid rgba(245,240,228,0.15)" }}>
                     {imageUrl ? (
                       <div className="aspect-[3/4] overflow-hidden" style={{ borderBottom: "1px solid rgba(245,240,228,0.1)" }}>
@@ -811,14 +755,12 @@ function TeachersPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
                     ) : (
                       <div className="aspect-[3/4] flex flex-col items-center justify-end pb-4 px-4 relative overflow-hidden"
                         style={{ background: "linear-gradient(180deg, rgba(30,56,20,0.4) 0%, rgba(20,40,12,0.6) 100%)", borderBottom: "1px solid rgba(245,240,228,0.1)" }}>
-                        {/* Silhouette */}
                         <div className="absolute top-6 left-1/2 -translate-x-1/2">
                           <div className="w-16 h-16 rounded-full mx-auto mb-1" style={{ background: "rgba(245,240,228,0.12)", border: "2px dashed rgba(245,240,228,0.25)" }}>
                             <div className="w-full h-full flex items-center justify-center">
                               <GraduationCap size={28} style={{ color: "rgba(245,240,228,0.4)" }} />
                             </div>
                           </div>
-                          {/* Standing body placeholder */}
                           <div className="w-24 h-28 mx-auto mt-1 rounded-t-full" style={{ background: "rgba(245,240,228,0.08)", border: "2px dashed rgba(245,240,228,0.18)" }} />
                         </div>
                         <div className="chalk text-xs opacity-40 text-center absolute bottom-2 w-full">Photo coming soon</div>
@@ -897,7 +839,6 @@ function BlogPreviewSection({ setPage }: { setPage: (p: Page) => void }) {
             {BLOG_POSTS.map(({ id, subject, subjectColor, title, excerpt, date, readTime, page: pg }, i) => (
               <div key={id} className={`chalk-anim ${vis ? "vis" : ""}`} style={{ animationDelay: `${i * 0.15}s` }}>
                 <div className="h-full rounded-sm overflow-hidden shadow-xl" style={{ background: "#FBF8F0", transform: `rotate(${[-0.5, 0.5, -0.3][i]}deg)` }}>
-                  {/* Notebook header with lines */}
                   <div className="h-2" style={{ background: subjectColor }} />
                   <div className="lined-paper p-5 h-full">
                     <div className="flex items-center justify-between mb-2">
@@ -954,7 +895,6 @@ function CTASection({ setPage }: { setPage: (p: Page) => void }) {
                     Meet Our Faculty <GraduationCap size={18} />
                   </button>
                 </div>
-                {/* Contact quick links */}
                 <div className="flex flex-wrap justify-center gap-6 mt-6 opacity-80" style={{ fontFamily: "var(--font-body)" }}>
                   <a href={`tel:${BRAND.phone1Href}`} className="flex items-center gap-1.5 text-sm hover:opacity-100 transition-opacity"><Phone size={14} /> {BRAND.phone1}</a>
                   <a href={`tel:${BRAND.phone2Href}`} className="flex items-center gap-1.5 text-sm hover:opacity-100 transition-opacity"><Phone size={14} /> {BRAND.phone2}</a>
@@ -994,7 +934,6 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
 
   return (
     <div className="min-h-screen pt-20 page-bg" style={{ background: "linear-gradient(170deg, #0A1506 0%, #0D1A07 100%)" }}>
-      {/* Cork board section */}
       <section className="py-14 px-4 sm:px-6">
         <div className="max-w-[1440px] mx-auto">
           <div className="text-center mb-10">
@@ -1003,21 +942,16 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
             <div className="chalk text-lg opacity-65 mt-2">Pinned to the notice board — for you to know them.</div>
           </div>
 
-          {/* Cork board */}
           <div className="cork-bg rounded-lg p-8 md:p-12 shadow-2xl" style={{ boxShadow: "0 12px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.15)", border: "8px solid #8B5220" }}>
-            {/* Cork border detail */}
             <div ref={ref} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {teachers.map(({ id, name, subject, pin, bio, classes, imageUrl }, i) => (
                 <div key={id} className={`chalk-anim ${vis ? "vis" : ""} cursor-pointer`} style={{ animationDelay: `${i * 0.18}s` }}
                   onClick={() => setSelected(selected === id ? null : id)}>
                   <div className="relative pt-4 teacher-card-hover" style={{ transform: `rotate(${CARD_ROTATIONS[i % CARD_ROTATIONS.length]}deg)` }}>
-                    {/* Push pin */}
                     <div className="absolute -top-1 left-1/2 -translate-x-1/2 z-10" style={{ width: 18, height: 18, borderRadius: "50%", background: `radial-gradient(circle at 35% 35%, ${pin}EE, ${pin}88)`, boxShadow: `0 3px 8px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.3)` }}>
                       <div style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(255,255,255,0.45)", margin: "3px auto" }} />
                     </div>
-                    {/* Paper card */}
                     <div className="bg-[#FFF8F0] shadow-xl overflow-hidden" style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.35)", transform: selected === id ? "scale(1.06)" : "scale(1)", transition: "transform 0.3s" }}>
-                      {/* Photo area */}
                       {imageUrl ? (
                         <div className="aspect-square relative overflow-hidden">
                           <img src={imageUrl} alt={name} className="w-full h-full object-cover" />
@@ -1025,17 +959,14 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
                         </div>
                       ) : (
                         <div className="aspect-square flex flex-col items-center justify-center relative" style={{ background: "linear-gradient(180deg, #E8E0D0, #D8D0C0)" }}>
-                          {/* Placeholder silhouette */}
                           <div className="w-14 h-14 rounded-full flex items-center justify-center mb-1" style={{ background: "rgba(100,80,60,0.2)", border: "2px dashed rgba(100,80,60,0.3)" }}>
                             <GraduationCap size={24} style={{ color: "rgba(100,80,60,0.5)" }} />
                           </div>
                           <div className="w-20 h-20 rounded-t-full" style={{ background: "rgba(100,80,60,0.15)", border: "2px dashed rgba(100,80,60,0.2)" }} />
                           <div className="absolute bottom-2 left-0 right-0 text-center text-xs text-gray-400" style={{ fontFamily: "var(--font-heading)" }}>Photo Placeholder</div>
-                          {/* Subject color strip */}
                           <div className="absolute top-0 left-0 right-0 h-1.5" style={{ background: pin }} />
                         </div>
                       )}
-                      {/* Info */}
                       <div className="p-3 border-t border-gray-200">
                         <div className="text-sm font-bold text-gray-800" style={{ fontFamily: "var(--font-heading)", fontSize: "1.1rem" }}>{name}</div>
                         <div className="text-xs font-semibold mt-0.5" style={{ color: pin, fontFamily: "var(--font-body)" }}>{subject}</div>
@@ -1056,7 +987,6 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
         </div>
       </section>
 
-      {/* School story on the board */}
       <DusterSection>
         <section className="py-14 px-4 sm:px-6">
           <div className="max-w-[1280px] mx-auto">
@@ -1092,7 +1022,6 @@ function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
                     </div>
                   </div>
                 </div>
-                {/* Stats row */}
                 <div className="mt-10 pt-6" style={{ borderTop: "1.5px solid rgba(245,240,228,0.2)" }}>
                   <div className="flex flex-wrap justify-around gap-6">
                     {[["9th–12th", "Levels Taught"], ["CBSE", "Board"], ["2", "Class Modes"], ["4", "Expert Faculty"]].map(([n, l]) => (
@@ -1137,7 +1066,6 @@ function GalleryPage() {
             <div className="chalk text-lg opacity-65 mt-2">Moments from the classroom — pinned and cherished.</div>
           </div>
 
-          {/* Corkboard-style gallery */}
           <div className="cork-bg rounded-lg p-8 md:p-12 shadow-2xl" style={{ border: "8px solid #8B5220" }}>
             {extended.length === 0 ? (
               <div className="chalk text-center opacity-60 py-10">Photos coming soon.</div>
@@ -1149,7 +1077,6 @@ function GalleryPage() {
                     <div key={`${id}-${i}`} className={`break-inside-avoid chalk-anim ${vis ? "vis" : ""}`}
                       style={{ animationDelay: `${i * 0.08}s`, transform: `rotate(${rotate + (i % 2 === 0 ? 0.3 : -0.3)}deg)`, display: "inline-block", width: "100%", marginBottom: "1.25rem" }}>
                       <div className="bg-white p-2 pb-7 shadow-xl group cursor-pointer hover:scale-105 transition-transform" style={{ boxShadow: "0 6px 24px rgba(0,0,0,0.45)" }}>
-                        {/* Tape strips */}
                         {i % 3 === 0 && <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-12 h-4 opacity-50 rotate-1" style={{ background: "rgba(220,210,170,0.7)", borderRadius: 2 }} />}
                         <div className="overflow-hidden" style={{ aspectRatio: i % 3 === 1 ? "3/4" : "4/3" }}>
                           <img
@@ -1200,7 +1127,6 @@ function BlogPage() {
             <div className="chalk text-lg opacity-65 mt-2">Teacher&apos;s notes — made open for every student.</div>
           </div>
 
-          {/* Notebook header */}
           <div className="rounded-t-lg px-6 py-3 flex items-center gap-3" style={{ background: "#2C5016", borderBottom: "3px solid #1A3010" }}>
             <div className="w-3 h-3 rounded-full bg-red-400" />
             <div className="w-3 h-3 rounded-full bg-yellow-400" />
@@ -1213,7 +1139,6 @@ function BlogPage() {
               <div key={id} className={`chalk-anim ${vis ? "vis" : ""} border-b border-gray-200 last:border-0`}
                 style={{ animationDelay: `${i * 0.1}s` }}>
                 <div className={`lined-paper px-6 md:px-10 py-6 flex gap-5 group cursor-pointer hover:bg-[#F5F1E8] transition-colors`}>
-                  {/* Page number */}
                   <div className="text-2xl font-bold text-gray-200 shrink-0 w-8 text-right" style={{ fontFamily: "JetBrains Mono, monospace" }}>{pg}</div>
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-1.5">
@@ -1239,19 +1164,6 @@ function BlogPage() {
 /* =========================================================
    CONTACT PAGE
    ========================================================= */
-// Basic abuse protection for the enquiry form. Real network-level DDoS
-// mitigation happens at Netlify's edge (and, better still, if the domain
-// sits behind Cloudflare) — there's no application code that can stop a
-// volumetric flood. What this *can* stop is the much more common problem
-// for a form like this: bots and scripts spamming submissions. Three
-// layers, stacked:
-//   1. A hidden honeypot field ("_honey") — formsubmit.co silently drops
-//      any submission where it's filled in, which real visitors never do.
-//   2. A minimum fill-time check — genuine visitors take at least a few
-//      seconds to fill a form; scripted submissions almost always fire
-//      near-instantly on page load.
-//   3. A client-side cooldown — blocks rapid repeat submissions from the
-//      same browser so one visitor (or a loop) can't hammer the endpoint.
 const MIN_FILL_SECONDS = 3;
 const SUBMIT_COOLDOWN_MS = 60_000;
 const LAST_SUBMIT_KEY = "sai_enquiry_last_submit";
@@ -1265,22 +1177,18 @@ function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Honeypot: a real visitor never sees or fills this field.
     const honey = (e.target as HTMLFormElement).elements.namedItem("_honey") as HTMLInputElement | null;
     if (honey && honey.value) {
-      // Silently pretend success so a bot doesn't learn its submission was rejected.
       setStatus("sent");
       return;
     }
 
-    // Timing trap: reject submissions that happen implausibly fast.
     const elapsedSeconds = (Date.now() - mountedAtRef.current) / 1000;
     if (elapsedSeconds < MIN_FILL_SECONDS) {
       setStatus("error");
       return;
     }
 
-    // Client-side cooldown to block rapid repeat submissions.
     const lastSubmit = Number(window.localStorage.getItem(LAST_SUBMIT_KEY) || 0);
     if (Date.now() - lastSubmit < SUBMIT_COOLDOWN_MS) {
       setStatus("cooldown");
@@ -1322,17 +1230,13 @@ function ContactPage() {
             <div className="chalk text-lg opacity-65 mt-2">Leave a note. We&apos;ll write back promptly.</div>
           </div>
 
-          {/* Desk surface */}
           <div className="desk-bg rounded-lg p-8 md:p-12 shadow-2xl" style={{ border: "6px solid #5A3818", boxShadow: "0 12px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.08)" }}>
-            {/* Desk items (decorative top bar) */}
             <div className="flex items-end gap-4 mb-8 pb-4" style={{ borderBottom: "2px solid rgba(245,240,228,0.1)" }}>
-              {/* Pen holder */}
               <div className="w-8 h-12 rounded-b-full" style={{ background: "rgba(245,240,228,0.15)", border: "1px solid rgba(245,240,228,0.2)" }}>
                 <div className="flex flex-col items-center gap-0.5 pt-1">
                   {[...Array(3)].map((_, i) => <div key={i} style={{ width: 3, height: 8, background: "rgba(245,240,228,0.5)", borderRadius: 1 }} />)}
                 </div>
               </div>
-              {/* Ruler */}
               <div className="h-3 flex-1 max-w-24 rounded" style={{ background: "rgba(220,180,100,0.3)", border: "1px solid rgba(220,180,100,0.4)" }}>
                 {Array.from({ length: 8 }).map((_, i) => <div key={i} className="inline-block" style={{ width: "12.5%", height: "60%", borderRight: "1px solid rgba(220,180,100,0.5)" }} />)}
               </div>
@@ -1340,7 +1244,6 @@ function ContactPage() {
             </div>
 
             <div ref={ref} className="grid md:grid-cols-5 gap-8">
-              {/* Contact info card */}
               <div className={`md:col-span-2 chalk-anim ${vis ? "vis" : ""}`}>
                 <div className="bg-[#FBF8F0] rounded p-6 shadow-xl h-full" style={{ border: "1px solid rgba(100,70,30,0.2)" }}>
                   <div className="text-gray-800 font-bold text-xl mb-1" style={{ fontFamily: "var(--font-body)" }}>{BRAND.name}</div>
@@ -1368,7 +1271,6 @@ function ContactPage() {
                       </div>
                     ))}
                   </div>
-                  {/* Subjects taught */}
                   <div className="mt-5 pt-4 border-t border-gray-200">
                     <div className="text-xs text-gray-400 uppercase tracking-wider mb-2" style={{ fontFamily: "var(--font-body)" }}>Subjects Offered</div>
                     {["Mathematics", "Physics", "Chemistry"].map((s, i) => (
@@ -1380,7 +1282,6 @@ function ContactPage() {
                 </div>
               </div>
 
-              {/* Enquiry form on paper */}
               <div className={`md:col-span-3 chalk-anim ${vis ? "vis" : ""}`} style={{ animationDelay: "0.2s" }}>
                 {status === "sent" ? (
                   <div className="bg-[#FBF8F0] rounded p-8 shadow-xl flex flex-col items-center justify-center gap-4 h-full" style={{ border: "1px solid rgba(100,70,30,0.2)", minHeight: 320 }}>
@@ -1393,11 +1294,6 @@ function ContactPage() {
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="bg-[#FBF8F0] rounded p-6 shadow-xl lined-paper" style={{ border: "1px solid rgba(100,70,30,0.2)" }}>
-                    {/* Honeypot — hidden from real visitors via CSS + off-screen
-                        placement, never removed from the DOM (a bot reading only
-                        computed styles can still "see" display:none, so this is
-                        moved off-canvas instead). Left blank by humans; if a bot
-                        fills it, formsubmit.co silently discards the submission. */}
                     <input
                       type="text"
                       name="_honey"
@@ -1535,11 +1431,6 @@ function Footer({ setPage }: { setPage: (p: Page) => void }) {
 function LightModeStyles() {
   return (
     <style>{`
-      /* Light mode keeps the chalkboard-green identity but lifts every page
-         and section background to a brighter, daytime shade of the same
-         green — consistent across every page. Boards, the footer, and paper
-         cards intentionally stay dark/light as designed, since a chalkboard
-         and a sheet of paper don't change color with the room lights. */
       :root:not(.dark) .page-bg {
         background: linear-gradient(170deg, #3C7024 0%, #468226 50%, #3C7024 100%) !important;
       }
@@ -1551,9 +1442,6 @@ function LightModeStyles() {
    MAIN APP
    ========================================================= */
 export default function App() {
-  // Hidden admin entry point — reachable ONLY by typing the exact secret
-  // path directly into the browser. It is never linked from the navbar,
-  // footer, or any page, and is intentionally excluded from robots.txt.
   if (typeof window !== "undefined" && window.location.pathname === ADMIN_PATH) {
     return <AdminApp />;
   }
@@ -1569,8 +1457,6 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [page]);
 
-  // Keep the URL, <title>, meta description, and canonical link in sync
-  // with the visible page so each section is a distinct, indexable URL.
   useEffect(() => {
     const seo = PAGE_SEO[page];
     document.title = seo.title;
@@ -1578,7 +1464,6 @@ export default function App() {
     setCanonical(PAGE_PATHS[page]);
   }, [page]);
 
-  // Support browser back/forward between the app's pages.
   useEffect(() => {
     const onPopState = () => setPage(getPageFromLocation());
     window.addEventListener("popstate", onPopState);
