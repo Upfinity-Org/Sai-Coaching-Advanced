@@ -1,0 +1,11 @@
+{
+  "name": "Sai Coaching Center",
+  "short_name": "Sai Coaching",
+  "icons": [
+    { "src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "theme_color": "#2C5016",
+  "background_color": "#0D1A07",
+  "display": "standalone"
+}

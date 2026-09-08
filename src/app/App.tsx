@@ -95,7 +95,7 @@ const BRAND = {
   name: "Sai Coaching Center",
   location: "Thoraipakkam",
   cityLine: "Thoraipakkam, Chennai",
-  addressLine: "No 10, Sai Nagar 1st Main Road, Thoraipakkam, Chennai, Tamil Nadu",
+  addressLine: "2nd Floor, Plot No. 18, Sai Nagar 1st Main Road, Thoraipakkam, Chennai, Tamil Nadu",
   phone1: "91711 19078",
   phone2: "86789 78053",
   phone1Href: "+919171119078",
@@ -127,9 +127,9 @@ type GalleryView = {
 };
 
 const FALLBACK_TEACHERS: TeacherView[] = [
-  { id: "t1", name: "Mathematics Faculty", subject: "Mathematics", classes: "IX–XII", pin: "#E05252", bio: "Expert in Algebra, Calculus & Coordinate Geometry", imageUrl: null },
-  { id: "t2", name: "Physics Faculty", subject: "Physics", classes: "XI–XII", pin: "#4A90D9", bio: "Specialist in Mechanics, Optics & Modern Physics", imageUrl: null },
-  { id: "t3", name: "Chemistry Faculty", subject: "Chemistry", classes: "XI–XII", pin: "#48A86A", bio: "Expert in Organic, Inorganic & Physical Chemistry", imageUrl: null },
+  { id: "t1", name: "Mathematics Faculty", subject: "Mathematics", classes: "CBSE IX–XII, SB X & XII", pin: "#E05252", bio: "Expert in Algebra, Calculus & Coordinate Geometry", imageUrl: null },
+  { id: "t2", name: "Physics Faculty", subject: "Physics", classes: "CBSE XI–XII", pin: "#4A90D9", bio: "Specialist in Mechanics, Optics & Modern Physics", imageUrl: null },
+  { id: "t3", name: "Chemistry Faculty", subject: "Chemistry", classes: "CBSE XI–XII", pin: "#48A86A", bio: "Expert in Organic, Inorganic & Physical Chemistry", imageUrl: null },
   { id: "t4", name: "Science Faculty", subject: "Science", classes: "IX–X", pin: "#D4A017", bio: "Strong foundation building for CBSE 9th & 10th Science", imageUrl: null },
 ];
 
@@ -685,9 +685,9 @@ function SubjectsSection() {
   const chem = useReveal();
 
   const panels = [
-    { hook: math, title: "Mathematics", tag: "IX–XII", color: "chalk-blue", icon: <Calculator size={22} />, svg: <MathChalkSVG drawn={math.vis} />, desc: "Concept-first coaching that builds problem-solving confidence for every CBSE board exam." },
-    { hook: phy, title: "Physics", tag: "XI–XII", color: "chalk-yellow", icon: <Atom size={22} />, svg: <PhysicsChalkSVG drawn={phy.vis} />, desc: "From first principles to numericals, taught the way physics is meant to be understood." },
-    { hook: chem, title: "Chemistry", tag: "XI–XII", color: "chalk-green", icon: <Zap size={22} />, svg: <ChemistryChalkSVG drawn={chem.vis} />, desc: "Clear explanations of reactions and mechanisms, built for lasting exam-day recall." },
+    { hook: math, title: "Mathematics", tag: "CBSE IX–XII · SB X, XII", color: "chalk-blue", icon: <Calculator size={22} />, svg: <MathChalkSVG drawn={math.vis} />, desc: "Concept-first coaching that builds problem-solving confidence for every CBSE and State Board exam." },
+    { hook: phy, title: "Physics", tag: "CBSE XI–XII", color: "chalk-yellow", icon: <Atom size={22} />, svg: <PhysicsChalkSVG drawn={phy.vis} />, desc: "From first principles to numericals, taught the way physics is meant to be understood." },
+    { hook: chem, title: "Chemistry", tag: "CBSE XI–XII", color: "chalk-green", icon: <Zap size={22} />, svg: <ChemistryChalkSVG drawn={chem.vis} />, desc: "Clear explanations of reactions and mechanisms, built for lasting exam-day recall." },
   ];
 
   return (
@@ -1239,13 +1239,54 @@ function BlogPage() {
 /* =========================================================
    CONTACT PAGE
    ========================================================= */
+// Basic abuse protection for the enquiry form. Real network-level DDoS
+// mitigation happens at Netlify's edge (and, better still, if the domain
+// sits behind Cloudflare) — there's no application code that can stop a
+// volumetric flood. What this *can* stop is the much more common problem
+// for a form like this: bots and scripts spamming submissions. Three
+// layers, stacked:
+//   1. A hidden honeypot field ("_honey") — formsubmit.co silently drops
+//      any submission where it's filled in, which real visitors never do.
+//   2. A minimum fill-time check — genuine visitors take at least a few
+//      seconds to fill a form; scripted submissions almost always fire
+//      near-instantly on page load.
+//   3. A client-side cooldown — blocks rapid repeat submissions from the
+//      same browser so one visitor (or a loop) can't hammer the endpoint.
+const MIN_FILL_SECONDS = 3;
+const SUBMIT_COOLDOWN_MS = 60_000;
+const LAST_SUBMIT_KEY = "sai_enquiry_last_submit";
+
 function ContactPage() {
   const [form, setForm] = useState({ name: "", phone: "", email: "", grade: "", subject: "", message: "" });
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error" | "cooldown">("idle");
   const { ref, vis } = useReveal();
+  const mountedAtRef = useRef<number>(Date.now());
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Honeypot: a real visitor never sees or fills this field.
+    const honey = (e.target as HTMLFormElement).elements.namedItem("_honey") as HTMLInputElement | null;
+    if (honey && honey.value) {
+      // Silently pretend success so a bot doesn't learn its submission was rejected.
+      setStatus("sent");
+      return;
+    }
+
+    // Timing trap: reject submissions that happen implausibly fast.
+    const elapsedSeconds = (Date.now() - mountedAtRef.current) / 1000;
+    if (elapsedSeconds < MIN_FILL_SECONDS) {
+      setStatus("error");
+      return;
+    }
+
+    // Client-side cooldown to block rapid repeat submissions.
+    const lastSubmit = Number(window.localStorage.getItem(LAST_SUBMIT_KEY) || 0);
+    if (Date.now() - lastSubmit < SUBMIT_COOLDOWN_MS) {
+      setStatus("cooldown");
+      return;
+    }
+
     setStatus("sending");
     try {
       const res = await fetch("https://formsubmit.co/ajax/balamk22@gmail.com", {
@@ -1254,6 +1295,7 @@ function ContactPage() {
         body: JSON.stringify({
           _subject: `New enquiry from ${form.name || "a website visitor"} — ${BRAND.name}`,
           _template: "table",
+          _captcha: "true",
           Name: form.name,
           Phone: form.phone,
           Email: form.email || "Not provided",
@@ -1263,6 +1305,7 @@ function ContactPage() {
         }),
       });
       if (!res.ok) throw new Error("Request failed");
+      window.localStorage.setItem(LAST_SUBMIT_KEY, String(Date.now()));
       setStatus("sent");
     } catch {
       setStatus("error");
@@ -1307,7 +1350,7 @@ function ContactPage() {
                       { icon: <MapPin size={16} />, label: "Address", val: BRAND.addressLine },
                       { icon: <Phone size={16} />, label: "Phone", val: BRAND.phone1, href: `tel:${BRAND.phone1Href}`, val2: BRAND.phone2, href2: `tel:${BRAND.phone2Href}` },
                       { icon: <Mail size={16} />, label: "Email", val: BRAND.email, href: `mailto:${BRAND.email}` },
-                      { icon: <Clock size={16} />, label: "Hours", val: "Mon–Sat: 7 AM – 8 PM" /* TODO: confirm real hours */ },
+                      { icon: <Clock size={16} />, label: "Hours", val: "Every day: 6 PM – 9 PM" },
                     ].map(({ icon, label, val, href, val2, href2 }) => (
                       <div key={label} className="flex items-start gap-3">
                         <div style={{ color: "#2C5016", marginTop: 2 }}>{icon}</div>
@@ -1350,6 +1393,19 @@ function ContactPage() {
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="bg-[#FBF8F0] rounded p-6 shadow-xl lined-paper" style={{ border: "1px solid rgba(100,70,30,0.2)" }}>
+                    {/* Honeypot — hidden from real visitors via CSS + off-screen
+                        placement, never removed from the DOM (a bot reading only
+                        computed styles can still "see" display:none, so this is
+                        moved off-canvas instead). Left blank by humans; if a bot
+                        fills it, formsubmit.co silently discards the submission. */}
+                    <input
+                      type="text"
+                      name="_honey"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      aria-hidden="true"
+                      style={{ position: "absolute", left: "-9999px", opacity: 0, height: 0, width: 0 }}
+                    />
                     <div className="text-gray-800 font-bold text-lg mb-4" style={{ fontFamily: "var(--font-heading)" }}>Student Enquiry Form</div>
                     <div className="grid grid-cols-2 gap-4">
                       {[
@@ -1382,6 +1438,11 @@ function ContactPage() {
                     {status === "error" && (
                       <div className="mt-3 px-3 py-2 rounded text-sm" style={{ background: "rgba(212,24,61,0.08)", color: "#B0102E", fontFamily: "var(--font-body)", border: "1px solid rgba(212,24,61,0.25)" }}>
                         Something went wrong sending your enquiry. Please try again, or call us directly at {BRAND.phone1}.
+                      </div>
+                    )}
+                    {status === "cooldown" && (
+                      <div className="mt-3 px-3 py-2 rounded text-sm" style={{ background: "rgba(212,24,61,0.08)", color: "#B0102E", fontFamily: "var(--font-body)", border: "1px solid rgba(212,24,61,0.25)" }}>
+                        An enquiry was just sent from this device. Please wait a minute before submitting again, or call us directly at {BRAND.phone1}.
                       </div>
                     )}
                     <button type="submit" disabled={status === "sending"} className="mt-4 w-full py-3 rounded font-bold text-sm flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-100 disabled:opacity-60 disabled:hover:scale-100"
