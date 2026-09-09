@@ -1,1 +1,11 @@
+# Netlify does NOT automatically redirect the default *.netlify.app
+# subdomain to a connected custom domain — both stay live and serve
+# identical content unless a rule like this exists. This has to be a
+# domain-specific rule (i.e. "from" includes the full https://host),
+# and it must come BEFORE the SPA catch-all below, since Netlify
+# processes _redirects rules top-to-bottom and uses the first match.
+https://saicoaching.netlify.app/*  https://saicoaching.com/:splat  301!
+
+# SPA fallback — every other path serves index.html so React Router
+# (via the History API) can handle it client-side.
 /*    /index.html   200
