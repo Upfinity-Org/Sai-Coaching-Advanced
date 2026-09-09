@@ -2,5 +2,3 @@ node_modules/
 dist/
 .env
 .env.local
-SaiCoaching_Invoice.pdf
-SaiCoaching_Payment_Receipt.pdf
